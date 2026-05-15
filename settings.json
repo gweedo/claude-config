@@ -1,18 +1,19 @@
 {
-  "autoUpdatesChannel": "latest",
   "hooks": {
     "Stop": [
       {
         "hooks": [
           {
             "type": "command",
-            "shell": "bash",
             "command": "bash \"$HOME/.claude/hooks/sync-to-github.sh\"",
+            "shell": "bash",
             "statusMessage": "Syncing Claude config to GitHub...",
             "async": true
           }
         ]
       }
     ]
-  }
+  },
+  "autoUpdatesChannel": "latest",
+  "theme": "dark"
 }

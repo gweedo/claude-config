@@ -1,0 +1,18 @@
+# Credentials - never commit
+.credentials.json
+
+# Ephemeral runtime state
+.last-cleanup
+mcp-needs-auth-cache.json
+ide/
+session-env/
+shell-snapshots/
+
+# Session and conversation history
+sessions/
+projects/
+
+# Cache and downloads
+cache/
+downloads/
+backups/

@@ -1,3 +1,18 @@
 {
-  "autoUpdatesChannel": "latest"
+  "autoUpdatesChannel": "latest",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "shell": "bash",
+            "command": "cd ~/.claude && status=$(git status --porcelain settings.json settings.local.json .gitignore 2>/dev/null) && [ -n \"$status\" ] && git add settings.json settings.local.json .gitignore && git commit -m \"Auto-sync $(date '+%Y-%m-%d %H:%M')\" && git push 2>/dev/null || true",
+            "statusMessage": "Syncing Claude config to GitHub...",
+            "async": true
+          }
+        ]
+      }
+    ]
+  }
 }

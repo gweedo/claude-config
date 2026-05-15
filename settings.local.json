@@ -1,1 +1,10 @@
-{}
+{
+  "permissions": {
+    "allow": [
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "Bash(bash -c 'cd ~/.claude 2>/dev/null || cd \"$USERPROFILE/.claude\" 2>/dev/null; status=$\\(git status --porcelain settings.json settings.local.json .gitignore 2>/dev/null\\); echo \"status output: [${status}]\"; exit 0')",
+      "Bash(bash -c 'cd ~/.claude && git status --porcelain settings.json settings.local.json .gitignore 2>/dev/null; echo \"exit: $?\"')"
+    ]
+  }
+}

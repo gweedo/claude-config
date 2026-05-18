@@ -14,7 +14,9 @@
       }
     ]
   },
+  "effortLevel": "medium",
   "autoUpdatesChannel": "latest",
   "theme": "dark",
-  "effortLevel": "medium"
+  "agentPushNotifEnabled": true,
+  "inputNeededNotifEnabled": true
 }

@@ -12,6 +12,7 @@ Personal Claude Code configuration backup, auto-synced to GitHub at the end of e
 | `agents/` | Custom subagents (`.md` files loaded automatically by Claude Code) |
 | `hooks/` | Shell scripts triggered by Claude Code lifecycle events |
 | `memory/` | Persistent memory files used across sessions |
+| `plugins/local/` | Custom plugins and skills not from the official marketplace |
 
 ## What's not tracked
 

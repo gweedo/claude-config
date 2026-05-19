@@ -16,6 +16,7 @@ status=$(git status --porcelain \
   agents/ \
   hooks/ \
   memory/ \
+  plugins/local/ \
   2>/dev/null)
 
 [ -z "$status" ] && exit 0
@@ -28,6 +29,7 @@ git add \
   agents/ \
   hooks/ \
   memory/ \
+  plugins/local/ \
   2>/dev/null || true
 
 git commit -m "Auto-sync $(date '+%Y-%m-%d %H:%M')" && git push 2>/dev/null || true

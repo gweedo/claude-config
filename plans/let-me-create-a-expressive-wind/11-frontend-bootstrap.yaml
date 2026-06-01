@@ -1,0 +1,15 @@
+step: 11-frontend-bootstrap
+title: Initialize the Next.js frontend with Vitest + RTL
+depends_on: [03-devcontainer]
+cwd: frontend
+actions:
+  - npx create-next-app@latest . --typescript --eslint --app --src-dir --import-alias "@/*" --no-tailwind
+  - npm i -D vitest @vitejs/plugin-react @testing-library/react @testing-library/jest-dom
+            @testing-library/user-event jsdom msw
+  - configure vitest.config.ts (jsdom env, setupFiles -> vitest.setup.ts importing jest-dom)
+  - add scripts: { test: "vitest", "test:run": "vitest run", lint: "next lint" }
+  - add .env.local.example: NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+acceptance:
+  - npm run dev serves http://localhost:3000
+  - npm test -- --run -> "no tests" clean exit
+  - npm run lint -> clean

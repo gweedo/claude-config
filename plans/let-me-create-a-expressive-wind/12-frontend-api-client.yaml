@@ -1,0 +1,22 @@
+step: 12-frontend-api-client
+title: Typed API client with MSW-backed tests
+depends_on: [11-frontend-bootstrap]
+cwd: frontend
+files:
+  - src/lib/api.ts          # fetch wrapper using NEXT_PUBLIC_API_BASE_URL, credentials: 'include'
+  - src/lib/types.ts        # Pizza, Allergen, LoginPayload, etc. (mirrors backend schemas)
+  - src/__tests__/api.test.ts
+  - src/test/msw/handlers.ts
+  - src/test/msw/server.ts
+api_surface:
+  - listPizzas({ all?: boolean }): Promise<Pizza[]>
+  - getPizza(id): Promise<Pizza>
+  - createPizza(input): Promise<Pizza>
+  - updatePizza(id, input): Promise<Pizza>
+  - deletePizza(id): Promise<void>
+  - login({email, password}): Promise<void>     # cookie set by backend
+  - logout(): Promise<void>
+  - me(): Promise<{ email: string } | null>
+acceptance:
+  - api.test.ts covers success + error paths for each function with MSW handlers
+  - Types in src/lib/types.ts match backend Pydantic schemas

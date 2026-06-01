@@ -1,0 +1,25 @@
+step: 03-devcontainer
+title: Scaffold the polyglot devcontainer via the devcontainer-init skill
+depends_on: [01-scaffold-and-repo]
+actions:
+  - invoke_skill:
+      name: devcontainer-init
+      intent: polyglot
+      requirements:
+        - Node 20
+        - Python 3.12
+        - uv preinstalled
+        - Postgres 16 as a docker-compose service named "db"
+        - forwardPorts: [3000, 8000, 5432]
+        - mount repo root at /workspaces/mulino
+        - env: { DATABASE_URL: "postgresql+asyncpg://postgres:postgres@db:5432/pizzeria" }
+        - vscode extensions: ms-python.python, ms-python.vscode-pylance, charliermarsh.ruff,
+                              dbaeumer.vscode-eslint, esbenp.prettier-vscode,
+                              bradlc.vscode-tailwindcss (optional)
+files_expected:
+  - .devcontainer/devcontainer.json
+  - .devcontainer/docker-compose.yml
+acceptance:
+  - "Reopen in Container" succeeds
+  - node -v -> v20.x, python -V -> 3.12.x, uv --version OK
+  - psql -h db -U postgres -c '\l' lists pizzeria

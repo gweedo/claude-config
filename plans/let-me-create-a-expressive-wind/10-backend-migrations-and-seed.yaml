@@ -1,0 +1,17 @@
+step: 10-backend-migrations-and-seed
+title: Alembic migrations + owner seed script
+depends_on: [09-backend-api-tdd]
+cwd: backend
+actions:
+  - uv run alembic init alembic
+  - configure alembic/env.py to use Settings.DATABASE_URL and import models metadata
+  - uv run alembic revision --autogenerate -m "initial schema"
+  - uv run alembic upgrade head
+  - create src/pizzeria/seed_owner.py:
+      reads OWNER_EMAIL, OWNER_PASSWORD env vars
+      idempotent: creates the single owner row if missing
+acceptance:
+  - "uv run alembic upgrade head" creates pizzas and owners tables
+  - "uv run python -m pizzeria.seed_owner" creates exactly one owner row,
+    re-running it is a no-op
+  - POST /api/auth/login with seeded credentials returns 200 + cookie

@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: dev-container
+    container_name: app
+    mounts:
+      - /var/run/docker.sock:/var/run/docker.sock
+    volumes:
+      - /workspace
+    command: sleep infinity
+    environment:
+      - NODE_ENV=development

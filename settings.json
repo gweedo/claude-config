@@ -1,4 +1,5 @@
 {
+  "plansDirectory": ".claude/plans",
   "hooks": {
     "Stop": [
       {
@@ -18,5 +19,6 @@
   "autoUpdatesChannel": "latest",
   "theme": "dark",
   "agentPushNotifEnabled": true,
-  "inputNeededNotifEnabled": true
+  "inputNeededNotifEnabled": true,
+  "model": "opus"
 }

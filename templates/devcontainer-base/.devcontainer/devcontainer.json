@@ -1,0 +1,19 @@
+{
+  "name": "Development Container",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "remoteUser": "vscode",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "anthropic.claude-code"
+      ],
+      "settings": {}
+    }
+  },
+  "postCreateCommand": "npm install --global npm 2>/dev/null || true; python -m pip install --upgrade pip 2>/dev/null || true"
+}

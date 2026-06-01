@@ -1,0 +1,34 @@
+step: 01-scaffold-and-repo
+title: Scaffold workspace and create the GitHub repo
+depends_on: []
+actions:
+  - create_dirs: [frontend/src, backend/src/pizzeria/domain, backend/src/pizzeria/application,
+                  backend/src/pizzeria/infrastructure, backend/src/pizzeria/api]
+  - create_files:
+      - README.md
+      - .gitignore   # Node + Python + envs
+      - .editorconfig
+  - git:
+      - git init -b main
+      - git add .
+      - git commit -m "chore: initial scaffold"
+  - gh:
+      - gh repo create mulino --private --source=. --remote=origin --push
+  - branch_protection:
+      method: PATCH
+      endpoint: /repos/{owner}/mulino/branches/main/protection
+      payload:
+        required_pull_request_reviews: { required_approving_review_count: 1 }
+        required_status_checks: { strict: true, contexts: [backend-tests, frontend-tests] }
+        enforce_admins: true
+        restrictions: null
+        allow_force_pushes: false
+        allow_deletions: false
+acceptance:
+  - "gh repo view mulino" succeeds
+  - main branch exists on origin
+  - branch protection JSON includes backend-tests and frontend-tests as required contexts
+notes:
+  - Required checks may need to be set AFTER step 02 lands once, since GitHub
+    only recognizes context names that have run at least once. If so, push the
+    workflows first via a feature-branch PR, merge, then apply protection.

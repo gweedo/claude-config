@@ -1,0 +1,29 @@
+step: 09-backend-api-tdd
+title: API layer (TDD) — FastAPI routers wiring use cases
+depends_on: [08-backend-auth-tdd]
+cwd: backend
+files:
+  - src/pizzeria/api/main.py            # FastAPI app, CORS for frontend origin
+  - src/pizzeria/api/deps.py            # session, repositories, current_owner
+  - src/pizzeria/api/schemas.py         # Pydantic DTOs (PizzaIn, PizzaOut, LoginIn, etc.)
+  - src/pizzeria/api/routers/pizzas.py
+  - src/pizzeria/api/routers/auth.py
+  - tests/integration/api/test_pizzas_public.py
+  - tests/integration/api/test_pizzas_admin.py
+  - tests/integration/api/test_auth.py
+endpoints:
+  - POST   /api/auth/login           public  -> sets httpOnly Secure SameSite=Lax cookie "session"
+  - POST   /api/auth/logout          authed
+  - GET    /api/auth/me              authed
+  - GET    /api/pizzas               public  (only available=true)
+  - GET    /api/pizzas?all=true      authed  (includes unavailable)
+  - GET    /api/pizzas/{id}          public
+  - POST   /api/pizzas               authed
+  - PUT    /api/pizzaslist/{id}      authed
+  - DELETE /api/pizzas/{id}          authed
+test_strategy:
+  - httpx.AsyncClient against the app with a real Postgres test DB
+  - override deps for current_owner in auth-failure tests
+acceptance:
+  - All API integration tests green
+  - OpenAPI doc renders at /docs and lists all endpoints with correct schemas

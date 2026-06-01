@@ -1,0 +1,30 @@
+step: 07-backend-infrastructure-tdd
+title: Infrastructure (TDD) — SQLAlchemy PizzaRepository + DB session
+depends_on: [06-backend-application-tdd]
+cwd: backend
+files:
+  - src/pizzeria/infrastructure/db.py                    # async engine, sessionmaker
+  - src/pizzeria/infrastructure/models.py                # PizzaORM, OwnerORM
+  - src/pizzeria/infrastructure/repositories/pizza_repository.py   # SqlPizzaRepository
+  - src/pizzeria/infrastructure/repositories/owner_repository.py
+  - src/pizzeria/infrastructure/mappers.py               # ORM <-> domain
+  - tests/integration/conftest.py                        # fixtures: async session against real Postgres
+  - tests/integration/test_sql_pizza_repository.py
+schema:
+  pizzas:
+    columns:
+      - id UUID PK
+      - name TEXT UNIQUE NOT NULL
+      - description TEXT NOT NULL
+      - ingredients TEXT[] NOT NULL CHECK (array_length(ingredients,1) >= 1)
+      - allergens TEXT[] NOT NULL  # values constrained at app layer to Allergen members
+      - price_amount NUMERIC(10,2) NOT NULL CHECK (price_amount > 0)
+      - price_currency CHAR(3) NOT NULL
+      - available BOOLEAN NOT NULL DEFAULT TRUE
+      - created_at, updated_at
+  owners:
+    columns: [id UUID PK, email TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL]
+acceptance:
+  - integration tests pass against devcontainer Postgres
+  - SqlPizzaRepository satisfies the PizzaRepository protocol (covered by reusing
+    the application-layer test contract via a shared abstract test suite)

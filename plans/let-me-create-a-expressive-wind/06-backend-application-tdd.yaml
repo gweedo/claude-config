@@ -1,0 +1,29 @@
+step: 06-backend-application-tdd
+title: Application layer (TDD) — use cases over an abstract PizzaRepository
+depends_on: [05-backend-domain-tdd]
+cwd: backend
+files:
+  - src/pizzeria/application/ports/pizza_repository.py   # abstract Protocol
+  - src/pizzeria/application/use_cases/list_pizzas.py
+  - src/pizzeria/application/use_cases/get_pizza.py
+  - src/pizzeria/application/use_cases/create_pizza.py
+  - src/pizzeria/application/use_cases/update_pizza.py
+  - src/pizzeria/application/use_cases/delete_pizza.py
+  - src/pizzeria/application/errors.py   # PizzaNotFound, DuplicatePizzaName
+  - tests/unit/application/test_*.py
+  - tests/unit/application/fakes.py      # InMemoryPizzaRepository
+port_signature: |
+  class PizzaRepository(Protocol):
+      async def add(self, pizza: Pizza) -> None: ...
+      async def get(self, pizza_id: UUID) -> Pizza | None: ...
+      async def list(self, *, only_available: bool = False) -> list[Pizza]: ...
+      async def update(self, pizza: Pizza) -> None: ...
+      async def delete(self, pizza_id: UUID) -> None: ...
+      async def find_by_name(self, name: str) -> Pizza | None: ...
+rules:
+  - CreatePizza raises DuplicatePizzaName if name already exists
+  - UpdatePizza/DeletePizza raise PizzaNotFound if id missing
+  - ListPizzas accepts only_available filter
+acceptance:
+  - All application tests green using InMemoryPizzaRepository
+  - No SQLAlchemy / FastAPI imports anywhere under application/

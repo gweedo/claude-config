@@ -1,0 +1,22 @@
+step: 13-frontend-homepage
+title: Public homepage — hero, pizza list, contacts
+depends_on: [12-frontend-api-client]
+cwd: frontend
+files:
+  - src/app/page.tsx                    # server component, fetches pizzas
+  - src/components/Hero.tsx
+  - src/components/PizzaCard.tsx        # shows name, description, ingredients,
+                                        # allergen badges, price
+  - src/components/PizzaList.tsx
+  - src/components/Contacts.tsx         # hardcoded address, phone, hours, map link
+  - src/__tests__/components/*.test.tsx
+contacts_data:
+  source: hardcoded
+  map_link: https://maps.app.goo.gl/DB4NzLKxTB1yXaxaA
+  fields_to_fill_in_during_impl: [name, address, phone, opening_hours]
+revalidation:
+  strategy: next.js fetch with { next: { revalidate: 60 } }
+acceptance:
+  - RTL tests cover empty list, populated list, and allergen badge rendering
+  - npm run build succeeds
+  - manual visit to / shows hero, pizzas from API, contacts section with map link

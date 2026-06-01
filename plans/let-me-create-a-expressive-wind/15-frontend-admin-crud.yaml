@@ -1,0 +1,22 @@
+step: 15-frontend-admin-crud
+title: Admin pizza CRUD UI
+depends_on: [14-frontend-admin-login]
+cwd: frontend
+files:
+  - src/app/admin/page.tsx                  # client component, lists all pizzas (?all=true)
+  - src/app/admin/pizzas/new/page.tsx
+  - src/app/admin/pizzas/[id]/page.tsx
+  - src/components/admin/PizzaTable.tsx
+  - src/components/admin/PizzaForm.tsx      # fields incl. allergens multi-select from EU 14
+  - src/components/admin/DeleteConfirm.tsx
+  - src/__tests__/admin/*.test.tsx
+form_fields:
+  - name (required, <=80)
+  - description (required)
+  - ingredients (chip input, min 1)
+  - allergens (multi-select bound to EU 14 enum values)
+  - price.amount (number > 0), price.currency (default EUR)
+  - available (toggle)
+acceptance:
+  - RTL tests cover create, edit, delete (with confirm), validation errors
+  - Manual flow: login -> create pizza -> appears on / after revalidate -> edit -> delete

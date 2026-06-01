@@ -1,0 +1,27 @@
+step: 08-backend-auth-tdd
+title: Auth (TDD) — password hashing, JWT, AuthenticateOwner use case
+depends_on: [07-backend-infrastructure-tdd]
+cwd: backend
+files:
+  - src/pizzeria/infrastructure/security/passwords.py   # passlib bcrypt: hash, verify
+  - src/pizzeria/infrastructure/security/jwt.py         # encode/decode HS256, exp claim
+  - src/pizzeria/application/use_cases/authenticate_owner.py
+  - tests/unit/application/test_authenticate_owner.py
+  - tests/unit/infrastructure/test_passwords.py
+  - tests/unit/infrastructure/test_jwt.py
+spec:
+  passwords:
+    - hash returns non-deterministic salted bcrypt string
+    - verify returns True only for matching plaintext
+  jwt:
+    - encode({sub, exp}) returns string; decode round-trips
+    - expired token raises ExpiredTokenError
+    - tampered token raises InvalidTokenError
+  AuthenticateOwner:
+    - returns token on valid credentials
+    - raises InvalidCredentials otherwise (no info leak between unknown email and wrong password)
+config:
+  - JWT_SECRET, JWT_ALG=HS256, JWT_TTL_MIN=120 in pydantic Settings
+acceptance:
+  - all auth tests green
+  - no plaintext password ever logged or returned

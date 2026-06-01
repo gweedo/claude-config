@@ -1,0 +1,38 @@
+step: 02-ci-workflows
+title: Add GitHub Actions workflows for backend and frontend
+depends_on: [01-scaffold-and-repo]
+files:
+  - path: .github/workflows/backend.yml
+    content_summary: |
+      name: backend-tests
+      triggers: [pull_request paths: backend/**, push branches: [main]]
+      jobs.backend-tests:
+        runs-on: ubuntu-latest
+        services.postgres:
+          image: postgres:16
+          env: { POSTGRES_PASSWORD: postgres, POSTGRES_DB: pizzeria_test }
+          ports: ["5432:5432"]
+          options: --health-cmd pg_isready
+        steps:
+          - actions/checkout@v4
+          - setup-python 3.12
+          - install uv
+          - uv sync --frozen (cwd=backend)
+          - uv run ruff check . (cwd=backend)
+          - uv run pytest (cwd=backend, DATABASE_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/pizzeria_test)
+  - path: .github/workflows/frontend.yml
+    content_summary: |
+      name: frontend-tests
+      triggers: [pull_request paths: frontend/**, push branches: [main]]
+      jobs.frontend-tests:
+        runs-on: ubuntu-latest
+        steps:
+          - actions/checkout@v4
+          - setup-node 20 + cache npm (working-directory: frontend)
+          - npm ci (cwd=frontend)
+          - npm run lint (cwd=frontend)
+          - npm test -- --run (cwd=frontend)
+          - npm run build (cwd=frontend)
+acceptance:
+  - Both workflows pass on a no-op PR
+  - Job names exactly "backend-tests" and "frontend-tests" so branch protection matches

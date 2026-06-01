@@ -1,0 +1,46 @@
+plan: pizzeria-mulino
+goal: >
+  Build a pizzeria web app: Next.js public homepage + admin area, FastAPI + Postgres backend
+  with DDD-lite layering, TDD throughout, polyglot devcontainer, GitHub repo with PR-only main
+  protected by required CI checks.
+repo:
+  host: github
+  name: mulino
+  visibility: private
+  default_branch: main
+  branch_protection:
+    require_pr: true
+    required_status_checks: [backend-tests, frontend-tests]
+    block_force_push: true
+    block_deletions: true
+layout:
+  - frontend/src/   # Next.js (React + TS)
+  - backend/src/pizzeria/{domain,application,infrastructure,api}
+  - .devcontainer/
+  - .github/workflows/
+stack:
+  frontend: { framework: nextjs, lang: ts, test: vitest+rtl, lint: eslint+prettier }
+  backend:  { framework: fastapi, lang: python3.12, tooling: uv+ruff+pytest, orm: sqlalchemy+alembic, auth: jwt-cookie }
+  db: postgres16
+skills_to_use:
+  - devcontainer-init   # mandatory in step 03
+  - run                 # final verification
+  - verify              # final verification
+  - fewer-permission-prompts  # optional after settling
+steps:
+  - 01-scaffold-and-repo.yaml
+  - 02-ci-workflows.yaml
+  - 03-devcontainer.yaml
+  - 04-backend-bootstrap.yaml
+  - 05-backend-domain-tdd.yaml
+  - 06-backend-application-tdd.yaml
+  - 07-backend-infrastructure-tdd.yaml
+  - 08-backend-auth-tdd.yaml
+  - 09-backend-api-tdd.yaml
+  - 10-backend-migrations-and-seed.yaml
+  - 11-frontend-bootstrap.yaml
+  - 12-frontend-api-client.yaml
+  - 13-frontend-homepage.yaml
+  - 14-frontend-admin-login.yaml
+  - 15-frontend-admin-crud.yaml
+  - 16-verification.yaml

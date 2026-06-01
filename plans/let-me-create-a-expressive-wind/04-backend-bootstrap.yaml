@@ -1,0 +1,23 @@
+step: 04-backend-bootstrap
+title: Initialize the Python backend with uv + DDD package skeleton
+depends_on: [03-devcontainer]
+cwd: backend
+actions:
+  - uv init --package --name pizzeria
+  - uv add fastapi "uvicorn[standard]" "sqlalchemy[asyncio]" asyncpg alembic
+           pydantic pydantic-settings "passlib[bcrypt]" "python-jose[cryptography]"
+  - uv add --dev pytest pytest-asyncio httpx ruff
+  - configure pyproject.toml:
+      tool.ruff: { line-length: 100, lint.select: [E,F,I,UP,B] }
+      tool.pytest.ini_options: { asyncio_mode: auto, testpaths: [tests] }
+  - create empty packages:
+      - src/pizzeria/__init__.py
+      - src/pizzeria/domain/__init__.py
+      - src/pizzeria/application/__init__.py
+      - src/pizzeria/infrastructure/__init__.py
+      - src/pizzeria/api/__init__.py
+      - tests/unit/, tests/integration/
+acceptance:
+  - uv run python -c "import pizzeria" succeeds
+  - uv run pytest -q -> "no tests ran" (clean exit)
+  - uv run ruff check . -> clean

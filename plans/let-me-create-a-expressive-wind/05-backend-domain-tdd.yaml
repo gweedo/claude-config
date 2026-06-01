@@ -1,0 +1,36 @@
+step: 05-backend-domain-tdd
+title: Domain layer (TDD) — Pizza, Money, Allergen
+depends_on: [04-backend-bootstrap]
+cwd: backend
+tdd_cycle: red -> green -> refactor, no infra imports allowed
+files:
+  - src/pizzeria/domain/allergen.py
+  - src/pizzeria/domain/money.py
+  - src/pizzeria/domain/pizza.py
+  - tests/unit/domain/test_allergen.py
+  - tests/unit/domain/test_money.py
+  - tests/unit/domain/test_pizza.py
+spec:
+  Allergen:
+    type: StrEnum
+    members: [gluten, crustaceans, eggs, fish, peanuts, soy, milk, nuts,
+              celery, mustard, sesame, sulphites, lupin, molluscs]
+  Money:
+    fields: { amount: Decimal, currency: str(3) }
+    invariants:
+      - amount > 0
+      - currency is uppercase ISO 4217 (validate length=3)
+    behavior: equality, formatting "12.50 EUR"
+  Pizza:
+    fields: { id: UUID, name: str, description: str, ingredients: list[str],
+              allergens: frozenset[Allergen], price: Money, available: bool }
+    invariants:
+      - name non-empty, <=80 chars
+      - at least 1 ingredient
+      - allergens is a frozenset of Allergen (no duplicates, no strings)
+    factory: Pizza.create(name, description, ingredients, allergens, price)
+    methods: mark_available(), mark_unavailable(), rename(new_name),
+             change_price(new_price), update(...)
+acceptance:
+  - uv run pytest tests/unit/domain -q -> all green
+  - 100% line coverage on domain/ via "uv run pytest --cov=pizzeria.domain"

@@ -1,0 +1,17 @@
+step: 14-frontend-admin-login
+title: Admin login flow + cookie-gated middleware
+depends_on: [13-frontend-homepage]
+cwd: frontend
+files:
+  - src/app/admin/login/page.tsx
+  - src/components/LoginForm.tsx
+  - src/middleware.ts                  # matcher: /admin/:path*, redirects to /admin/login if no session cookie
+  - src/__tests__/components/LoginForm.test.tsx
+behavior:
+  - LoginForm: email + password fields, client-side validation, calls api.login
+  - On 200 -> router.push('/admin')
+  - On 401 -> inline error "Invalid credentials" (no leak of which field was wrong)
+  - middleware: checks presence of session cookie only; backend verifies on every request
+acceptance:
+  - RTL tests: valid submit, invalid credentials, validation errors
+  - Visiting /admin without cookie redirects to /admin/login

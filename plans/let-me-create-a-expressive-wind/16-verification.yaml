@@ -1,0 +1,32 @@
+step: 16-verification
+title: End-to-end verification + PR-flow sanity check
+depends_on: [10-backend-migrations-and-seed, 15-frontend-admin-crud]
+checks:
+  devcontainer:
+    - node -v ; python -V ; uv --version
+    - psql -h db -U postgres -c '\l'
+  backend:
+    - (cd backend && uv run ruff check .)
+    - (cd backend && uv run pytest -q)
+    - (cd backend && uv run alembic upgrade head)
+    - (cd backend && uv run python -m pizzeria.seed_owner)
+    - (cd backend && uv run uvicorn pizzeria.api.main:app --reload &)
+    - curl localhost:8000/api/pizzas -> 200 []
+  frontend:
+    - (cd frontend && npm run lint)
+    - (cd frontend && npm test -- --run)
+    - (cd frontend && npm run build)
+    - (cd frontend && npm run dev &) ; open http://localhost:3000
+  manual_e2e:
+    skill: verify
+    flow:
+      - log in at /admin/login with seeded owner
+      - create a pizza, mark unavailable, edit, delete
+      - confirm homepage reflects available pizzas after revalidate window
+  pr_flow:
+    - create feature branch, push, open PR via gh
+    - confirm both required checks (backend-tests, frontend-tests) run and gate merge
+    - attempt "git push origin main" directly -> rejected by branch protection
+done_when:
+  - all checks above pass
+  - main branch contains a green-merged scaffold

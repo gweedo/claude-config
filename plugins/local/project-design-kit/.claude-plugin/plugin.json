@@ -1,0 +1,16 @@
+{
+  "name": "project-design-kit",
+  "version": "0.1.0",
+  "description": "Run a structured, decision-first design workflow for any software project: capture decisions, write ADRs, a technical spec, a structure/data-model doc, and a stakeholder questionnaire, then organize them into a clean docs/ tree.",
+  "author": {
+    "name": "Guido"
+  },
+  "keywords": [
+    "architecture",
+    "adr",
+    "technical-spec",
+    "decision-log",
+    "documentation",
+    "project-design"
+  ]
+}

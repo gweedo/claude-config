@@ -1,7 +1,7 @@
 {
   "name": "devcontainer-tools",
-  "version": "1.0.0",
-  "description": "Scaffolds .devcontainer configurations for Node.js, Python, and generic Ubuntu projects",
+  "version": "1.1.0",
+  "description": "Scaffolds .devcontainer configurations for Node.js, Python, and generic Ubuntu projects, and installs Claude Code skills from configured GitHub sources",
   "author": {
     "name": "ThisGweedo",
     "email": "guido.s1998@gmail.com"

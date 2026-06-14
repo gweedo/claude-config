@@ -1,0 +1,23 @@
+{
+  "baselineExtensions": ["anthropic.claude-code", "github.vscode-github-actions"],
+  "stacks": {
+    "node": {
+      "label": "Node.js 20 (npm install, ESLint, Prettier, Tailwind, Vue Volar)",
+      "template": "templates/node.devcontainer.json",
+      "prerequisiteFile": "package.json",
+      "prerequisiteWarning": "No `package.json` found — `postCreateCommand: npm install` will fail until one exists."
+    },
+    "python": {
+      "label": "Python 3.12 (pip install -r requirements.txt, Black, Ruff, Pylance)",
+      "template": "templates/python.devcontainer.json",
+      "prerequisiteFile": "requirements.txt",
+      "prerequisiteWarning": "No `requirements.txt` found — `postCreateCommand: pip install -r requirements.txt` will fail until one exists."
+    },
+    "generic": {
+      "label": "Ubuntu base (minimal, no language tooling)",
+      "template": "templates/generic.devcontainer.json",
+      "prerequisiteFile": null,
+      "prerequisiteWarning": null
+    }
+  }
+}

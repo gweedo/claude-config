@@ -1,0 +1,31 @@
+{
+  "targetDir": ".claude/skills",
+  "sources": {
+    "mattpocock": {
+      "repo": "https://github.com/mattpocock/skills",
+      "ref": "main"
+    },
+    "personal": {
+      "repo": "https://github.com/gweedo/claude-config",
+      "ref": "main"
+    }
+  },
+  "skills": [
+    {
+      "name": "impeccable",
+      "description": "Impeccable skill pack, installed via its own CLI (npx impeccable skills install)",
+      "default": true,
+      "type": "npx",
+      "command": "npx impeccable skills install"
+    },
+    {
+      "name": "mattpocock-skills",
+      "description": "Matt Pocock's public Claude skills collection",
+      "default": true,
+      "type": "git",
+      "source": "mattpocock",
+      "path": "",
+      "dest": "mattpocock-skills"
+    }
+  ]
+}

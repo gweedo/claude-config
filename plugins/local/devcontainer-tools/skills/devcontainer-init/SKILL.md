@@ -1,11 +1,11 @@
 ---
 name: devcontainer-init
 description: |
-  Use this skill when the user invokes "/devcontainer" or "/devcontainer-init", or asks to
+  Use this skill when the user invokes "/devcontainer-init", or asks to
   "initialize a devcontainer", "set up a dev container", "scaffold a .devcontainer folder",
   "create a devcontainer.json", "configure a development container", or wants to set up a
   VS Code devcontainer for Node.js, Python, or a generic Ubuntu project.
-version: 1.0.0
+version: 1.1.0
 argument-hint: [node|python|generic]
 allowed-tools: [Read, Glob, Write, AskUserQuestion]
 ---
@@ -13,6 +13,11 @@ allowed-tools: [Read, Glob, Write, AskUserQuestion]
 # Devcontainer Init
 
 Scaffold a `.devcontainer` folder with a ready-to-use `devcontainer.json` for the current project.
+
+All stack data — base image, ports, `postCreateCommand`, extensions, settings, and
+prerequisite checks — lives in `references/defaults.json`. The actual file content to
+write for each stack lives in `references/templates/<stack>.devcontainer.json`. The
+resulting folder layout is documented in `references/folder-tree.md`.
 
 ## Supported Stacks
 
@@ -29,14 +34,16 @@ Scaffold a `.devcontainer` folder with a ready-to-use `devcontainer.json` for th
 The user's argument is: `$ARGUMENTS`
 
 - If `$ARGUMENTS` (lowercased) is `node`, `python`, or `generic`, use that stack.
-- If `$ARGUMENTS` is empty, unrecognised, or any other value, use AskUserQuestion:
+- If `$ARGUMENTS` is empty, unrecognised, or any other value, read
+  `references/defaults.json` and use AskUserQuestion with one option per key under
+  `stacks`, using each stack's `label` as the option description:
 
   ```
   question: "Which stack should I generate the devcontainer for?"
   options:
-    - node    — Node.js 20 (npm install, ESLint, Prettier, Tailwind, Vue Volar)
-    - python  — Python 3.12 (pip install -r requirements.txt, Black, Ruff, Pylance)
-    - generic — Ubuntu base (minimal, no language tooling)
+    - node    — <stacks.node.label>
+    - python  — <stacks.python.label>
+    - generic — <stacks.generic.label>
   ```
 
   Wait for the answer before continuing.
@@ -63,94 +70,28 @@ Use Glob with pattern `.devcontainer/**` in the current working directory.
 
 ## Step 3 — Validate stack prerequisites (warn only, do not abort)
 
-**node**: Use Glob for `package.json`. If absent, note:
-> "No `package.json` found — `postCreateCommand: npm install` will fail until one exists."
+Read `references/defaults.json` and look up `stacks.<stack>.prerequisiteFile` and
+`stacks.<stack>.prerequisiteWarning` for the chosen stack.
 
-**python**: Use Glob for `requirements.txt`. If absent, note:
-> "No `requirements.txt` found — `postCreateCommand: pip install -r requirements.txt` will fail until one exists."
-
-**generic**: No validation needed.
+- If `prerequisiteFile` is non-null, use Glob for that file in the project root.
+- If it is not found, note the corresponding `prerequisiteWarning` to repeat in Step 5.
+- If `prerequisiteFile` is `null` (the `generic` stack), no validation is needed.
 
 ---
 
 ## Step 4 — Write the files
 
-Create `.devcontainer/devcontainer.json` using the exact template for the chosen stack.
+1. Read `references/templates/<stack>.devcontainer.json` (the chosen stack's template).
+2. Write its contents verbatim to `.devcontainer/devcontainer.json`.
 
-### Node.js template
-
-```json
-{
-  "name": "Node.js",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
-  "forwardPorts": [3000, 5173, 4173],
-  "postCreateCommand": "npm install",
-  "remoteUser": "node",
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-        "bradlc.vscode-tailwindcss",
-        "Vue.volar"
-      ],
-      "settings": {
-        "editor.formatOnSave": true,
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-      }
-    }
-  }
-}
-```
-
-### Python template
-
-```json
-{
-  "name": "Python 3.12",
-  "image": "mcr.microsoft.com/devcontainers/python:3.12",
-  "forwardPorts": [8000],
-  "postCreateCommand": "pip install -r requirements.txt",
-  "remoteUser": "vscode",
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "ms-python.python",
-        "ms-python.vscode-pylance",
-        "ms-python.black-formatter",
-        "charliermarsh.ruff"
-      ],
-      "settings": {
-        "editor.formatOnSave": true,
-        "editor.defaultFormatter": "ms-python.black-formatter",
-        "python.defaultInterpreterPath": "/usr/local/bin/python"
-      }
-    }
-  }
-}
-```
-
-### Generic/Ubuntu template
-
-```json
-{
-  "name": "Ubuntu",
-  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-  "remoteUser": "vscode",
-  "customizations": {
-    "vscode": {
-      "extensions": [],
-      "settings": {}
-    }
-  }
-}
-```
+The templates already include the baseline extensions described in
+`references/default-extensions.md` — no merging is required.
 
 ---
 
 ## Step 5 — Report results
 
-After writing all files, output a summary, for example:
+After writing the file, output a summary, for example:
 
 ```
 Created:
@@ -161,4 +102,4 @@ Next steps:
   • Adjust forwardPorts or extensions in .devcontainer/devcontainer.json as needed.
 ```
 
-If any prerequisite warnings were issued in Step 3, repeat them here as a reminder.
+If a prerequisite warning was noted in Step 3, repeat it here as a reminder.

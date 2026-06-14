@@ -13,6 +13,7 @@ Personal Claude Code configuration backup, auto-synced to GitHub at the end of e
 | `hooks/` | Shell scripts triggered by Claude Code lifecycle events |
 | `memory/` | Persistent memory files used across sessions |
 | `plugins/local/` | Custom plugins and skills not from the official marketplace |
+| `skills/` | User-level skills (`SKILL.md` files loaded automatically by Claude Code) |
 
 ## What's not tracked
 

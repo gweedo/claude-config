@@ -20,5 +20,16 @@
   "theme": "dark",
   "agentPushNotifEnabled": true,
   "inputNeededNotifEnabled": true,
-  "model": "opus"
+  "model": "opus",
+  "enabledPlugins": {
+    "gitkraken-hooks@gitkraken": true
+  },
+  "extraKnownMarketplaces": {
+    "gitkraken": {
+      "source": {
+        "path": "C:\\Users\\Guido.DESKTOP-45P6U2C\\.claude\\plugins\\marketplaces\\gitkraken",
+        "source": "directory"
+      }
+    }
+  }
 }

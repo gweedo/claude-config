@@ -1,0 +1,70 @@
+# Generic path-filtered deploy workflow (one per deployable app).
+# Replace <APP>, <PATH>, registry/login/deploy steps for your platform.
+# Mirrors the decided stages: checks -> scans -> build (immutable SHA) -> deploy.
+
+name: deploy-<APP>
+
+on:
+  pull_request:
+    paths: ["<PATH>/**"]          # PR: run checks only (no deploy)
+  push:
+    branches: [main]
+    paths: ["<PATH>/**"]          # merge to main: build + deploy staging
+
+permissions:
+  contents: read
+  id-token: write                 # OIDC federated auth to the cloud (no stored secret)
+
+concurrency:                      # cancel superseded runs
+  group: deploy-<APP>-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest        # hosted runner includes Docker (for integration tests)
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint & type-check
+        run: <lint + format + type-check for this stack>
+      - name: Tests (unit + application + integration) with coverage gate
+        run: <test runner> --cov --cov-fail-under=80   # E2E runs post-deploy on staging
+      - name: Security scans (block on high/critical)
+        run: <dependency audit> && <secret scan> && <SAST>
+
+  build-deploy:
+    needs: checks
+    if: github.event_name == 'push'        # only after merge to main
+    runs-on: ubuntu-latest
+    environment: staging                    # protection rules live on the environment
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cloud login (OIDC, no stored secret)
+        run: <oidc login using client-id/tenant-id, no secret>
+      - name: Build image (multi-stage) tagged by immutable SHA
+        run: |
+          IMAGE=<registry>/<APP>:sha-${{ github.sha }}
+          docker build -t "$IMAGE" <PATH>
+      - name: Scan image (block on high/critical)
+        run: <trivy or platform scanner> <registry>/<APP>:sha-${{ github.sha }}
+      - name: Push to registry
+        run: docker push <registry>/<APP>:sha-${{ github.sha }}
+      - name: Migrate DB (dedicated job, before traffic; expand/contract)
+        run: <run migrations against staging DB>
+      - name: Deploy to staging (deploy by digest)
+        run: <deploy staging>
+      - name: E2E on staging (promotion gate)
+        run: <playwright e2e against staging>
+
+  promote-production:
+    needs: build-deploy
+    runs-on: ubuntu-latest
+    environment: production                 # requires manual approval (protection rule)
+    steps:
+      - name: Deploy 'green' at 0% traffic
+        run: <create new revision, 0% weight>
+      - name: Health probe + smoke tests against green
+        run: <health check + smoke>
+      - name: Blue-green flip to 100%
+        run: <shift traffic 100% to green>
+      # Rollback = revert traffic weight to the previous (blue) revision.
+      # Automated rollback on error-rate/latency thresholds can be added once baselines exist.

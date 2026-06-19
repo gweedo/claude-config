@@ -14,8 +14,11 @@ It encodes the working style of: resolve the choices everything depends on first
 | **tech-spec-writer** | Writes `docs/architecture/TECH-SPEC.md` with Mermaid diagrams, components, data model, API, infra, CI/CD, testing, security, observability. |
 | **structure-designer** | Designs `docs/architecture/STRUCTURE.md`: surface/sitemap, data models + ER diagram, API endpoints, page layout, SEO. |
 | **requirements-questionnaire** | Produces a stakeholder questionnaire (in the stakeholders' language) whose answers feed a PRD. |
+| **cicd-designer** | Designs the CI/CD pipeline and deployment strategy stage by stage (branching, tests, security, image tagging, environments/secrets, migrations, release strategy, rollback). |
 
 Each skill ships a generic, fill-in template under its `templates/` folder.
+
+Shared utilities live under `skills/design-workflow/references/`: **decision-facilitation** (the stage-by-stage deep-dive method) and **mermaid-snippets** (monochrome diagram patterns). The `cicd-designer` skill also ships a generic GitHub Actions workflow template.
 
 ## How to use
 

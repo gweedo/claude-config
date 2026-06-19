@@ -1,11 +1,9 @@
 ---
 name: tech-spec-writer
 description: >
-  Use this skill to write a technical specification for a software project. Trigger phrases: "write the
-  tech spec", "create a technical specification", "document how the system is built", "spec out the
-  architecture", "write the engineering reference". Produces docs/architecture/TECH-SPEC.md with an
-  architecture overview, Mermaid diagrams, components, data model, API, infrastructure, CI/CD, testing,
-  security, and observability.
+  Write a technical specification (docs/architecture/TECH-SPEC.md) for a software project — architecture
+  overview with Mermaid diagrams, components, data model, API, infrastructure, CI/CD, testing, security,
+  observability. Use when the user wants to spec out or document how the system is built.
 metadata:
   version: "0.1.0"
 ---
@@ -34,13 +32,10 @@ Write to `docs/architecture/TECH-SPEC.md` from `templates/TECH-SPEC.template.md`
 
 ## Mermaid diagrams
 
-Use Mermaid (renders in most Markdown viewers). To keep diagrams monochrome, prefix with:
-
-```
-%%{init: {'theme':'base', 'themeVariables': {'primaryColor':'#ffffff','primaryBorderColor':'#333333','primaryTextColor':'#000000','lineColor':'#333333','clusterBkg':'#ffffff','clusterBorder':'#999999','fontFamily':'sans-serif'}}}%%
-```
-
-Prefer a clean top-down flow with grouped subgraphs over many crossing arrows; move minor relationships to a sentence under the diagram.
+Use Mermaid (renders in most Markdown viewers). Take the monochrome init prefix and the
+diagram patterns from `../design-workflow/references/mermaid-snippets.md` — don't hardcode
+the theme string here. Prefer a clean top-down flow with grouped subgraphs over many
+crossing arrows; move minor relationships to a sentence under the diagram.
 
 ## Quality
 
@@ -48,4 +43,4 @@ Prefer a clean top-down flow with grouped subgraphs over many crossing arrows; m
 - When scope changes, update affected sections and fix cross-references.
 - Mark deferred features clearly (e.g. "phase 2") so the spec reflects actual v1 scope.
 
-See `templates/TECH-SPEC.template.md`.
+See `templates/TECH-SPEC.template.md`. Reusable monochrome diagram patterns are in `../design-workflow/references/mermaid-snippets.md`.

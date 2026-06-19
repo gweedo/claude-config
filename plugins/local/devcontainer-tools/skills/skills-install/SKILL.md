@@ -1,10 +1,9 @@
 ---
 name: skills-install
 description: |
-  Use this skill when the user invokes "/skills-install", or asks to "install skills",
-  "set up project skills", "sync skills from my github", "install impeccable and the
-  default skill set", or wants to install Claude Code skills into this project's
-  .claude/skills/ from configured GitHub sources (a personal repo and public skill repos).
+  Install Claude Code skills into this project's .claude/skills/ from configured GitHub
+  sources (a personal repo and public skill repos). Use when the user wants to install or
+  sync project skills, or set up the default skill set.
 version: 1.0.0
 allowed-tools: [Read, Bash, AskUserQuestion]
 ---

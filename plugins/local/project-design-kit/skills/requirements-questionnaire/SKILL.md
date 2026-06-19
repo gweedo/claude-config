@@ -1,11 +1,9 @@
 ---
 name: requirements-questionnaire
 description: >
-  Use this skill to produce a stakeholder questionnaire that gathers product, content, or business input
-  from non-technical teammates. Trigger phrases: "prepare questions for the team", "make a questionnaire",
-  "I need to ask the stakeholders", "gather requirements from the content team", "what should I ask the
-  business side", "PRD input form". Produces a fill-in document in the stakeholders' language whose
-  answers feed a PRD.
+  Produce a stakeholder questionnaire that gathers product, content, or business input from
+  non-technical teammates, in their language, whose answers feed a PRD. Use when the user needs to
+  gather requirements from or prepare questions for stakeholders.
 metadata:
   version: "0.1.0"
 ---

@@ -1,11 +1,8 @@
 ---
 name: decision-tracker
 description: >
-  Use this skill to record, review, or manage project decisions and open questions. Trigger phrases:
-  "log this decision", "track this choice", "record this", "what have we decided", "show the decision
-  log", "what are our open questions", "what's still undecided", "mark this as decided". Maintains a
-  living DECISIONS.md with final decisions, provisional decisions, risks, open questions, and superseded
-  decisions.
+  Record, review, and manage project decisions and open questions in a living DECISIONS.md. Use when
+  the user wants to log a decision or choice, see what's been decided, or track what's still undecided.
 metadata:
   version: "0.1.0"
 ---

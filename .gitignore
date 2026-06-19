@@ -3,16 +3,22 @@
 
 # Ephemeral runtime state
 .last-cleanup
+.last-update-result.json
 mcp-needs-auth-cache.json
 ide/
 session-env/
 shell-snapshots/
+daemon/
+file-history/
+paste-cache/
 
 # Session and conversation history
 sessions/
 projects/
+history.jsonl
 
 # Cache and downloads
 cache/
 downloads/
 backups/
+plugins/plugin-catalog-cache.json

@@ -1,21 +1,40 @@
 {
   "baselineExtensions": ["anthropic.claude-code", "github.vscode-github-actions"],
+  "llmCodeSupport": {
+    "label": "Claude Code (Anthropic's CLI coding assistant)",
+    "feature": "ghcr.io/anthropics/devcontainer-features/claude-code:1",
+    "featureOptions": {},
+    "extension": "anthropic.claude-code",
+    "verifyCommand": "claude --version",
+    "note": "The feature installs the `claude` CLI at build time, independently of the stack; the extension is only the editor integration. Both are needed for full support. The CLI ships unauthenticated — run `claude` to log in or set ANTHROPIC_API_KEY (never commit it)."
+  },
+  "gitConfig": {
+    "label": "Global git config (identity, sane defaults, aliases)",
+    "template": "templates/gitconfig.template",
+    "targetFile": ".devcontainer/gitconfig",
+    "placeholders": { "name": "{{GIT_USER_NAME}}", "email": "{{GIT_USER_EMAIL}}" },
+    "applyCommand": "git config --global include.path \"${containerWorkspaceFolder}/.devcontainer/gitconfig\"",
+    "note": "A fresh container starts with no git identity. This writes a `.devcontainer/gitconfig` and wires it in via `git config --global include.path` on container create, so it layers on top of any existing ~/.gitconfig without clobbering it. Stack-independent."
+  },
   "stacks": {
     "node": {
       "label": "Node.js 20 (npm install, ESLint, Prettier, Tailwind, Vue Volar)",
       "template": "templates/node.devcontainer.json",
+      "detectGlobs": ["package.json", "pnpm-lock.yaml", "yarn.lock", "tsconfig*.json", "**/package.json"],
       "prerequisiteFile": "package.json",
       "prerequisiteWarning": "No `package.json` found — `postCreateCommand: npm install` will fail until one exists."
     },
     "python": {
-      "label": "Python 3.12 (pip install -r requirements.txt, Black, Ruff, Pylance)",
+      "label": "Python 3.13 (pip install -r requirements.txt, Black, Ruff, Pylance)",
       "template": "templates/python.devcontainer.json",
+      "detectGlobs": ["pyproject.toml", "requirements*.txt", "setup.cfg", "setup.py", "**/pyproject.toml"],
       "prerequisiteFile": "requirements.txt",
       "prerequisiteWarning": "No `requirements.txt` found — `postCreateCommand: pip install -r requirements.txt` will fail until one exists."
     },
     "generic": {
       "label": "Ubuntu base (minimal, no language tooling)",
       "template": "templates/generic.devcontainer.json",
+      "detectGlobs": [],
       "prerequisiteFile": null,
       "prerequisiteWarning": null
     }

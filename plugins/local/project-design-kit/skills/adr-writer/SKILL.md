@@ -1,10 +1,9 @@
 ---
 name: adr-writer
 description: >
-  Use this skill to write Architecture Decision Records (ADRs) and maintain the ADR index. Trigger
-  phrases: "write an ADR", "document this architecture decision", "record this design decision with
-  alternatives", "create an ADR for choosing X over Y", "add an ADR", "should we use X or Y" (when the
-  user wants it captured). Produces one numbered file per decision plus an index README.
+  Write Architecture Decision Records (ADRs) — one numbered file per decision plus an index README. Use
+  when the user wants to document or record an architecture/design decision with its alternatives, or
+  wants a choice between options (X vs Y) captured as an ADR.
 metadata:
   version: "0.1.0"
 ---

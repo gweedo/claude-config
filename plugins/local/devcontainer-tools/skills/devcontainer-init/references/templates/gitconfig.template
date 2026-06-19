@@ -1,0 +1,47 @@
+# Global git configuration applied inside the devcontainer.
+# This file is pulled in via `git config --global include.path` on container
+# create, so it layers on top of (and never clobbers) any existing ~/.gitconfig.
+# The skill substitutes {{GIT_USER_NAME}} / {{GIT_USER_EMAIL}} from your answers;
+# edit anything below to taste.
+
+[user]
+	name = {{GIT_USER_NAME}}
+	email = {{GIT_USER_EMAIL}}
+
+[init]
+	defaultBranch = main
+
+[pull]
+	rebase = true
+
+[push]
+	autoSetupRemote = true
+	default = current
+
+[fetch]
+	prune = true
+
+[core]
+	autocrlf = input
+	editor = code --wait
+
+[color]
+	ui = auto
+
+[diff]
+	colorMoved = default
+
+[merge]
+	conflictstyle = zdiff3
+
+[rerere]
+	enabled = true
+
+[alias]
+	st = status -sb
+	co = checkout
+	br = branch
+	ci = commit
+	last = log -1 HEAD
+	unstage = reset HEAD --
+	lg = log --oneline --graph --decorate --all

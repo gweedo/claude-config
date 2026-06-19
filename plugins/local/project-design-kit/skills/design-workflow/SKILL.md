@@ -1,12 +1,10 @@
 ---
 name: design-workflow
 description: >
-  Use this skill to run an end-to-end, decision-first design workflow for a software project.
-  Trigger phrases: "let's start the project", "design my project", "set up the project docs",
-  "what are our open questions", "help me plan the architecture", "run the design workflow",
-  "I want to design X before coding", "create the spec and ADRs for my project". This is the
-  orchestrator that sequences the decision-tracker, adr-writer, tech-spec-writer,
-  structure-designer, and requirements-questionnaire skills and organizes the output into a docs/ tree.
+  Run an end-to-end, decision-first design workflow for a software project, before writing code. Use
+  when the user wants to design or plan a project's architecture and documentation from scratch, or run
+  the design workflow. The orchestrator that sequences decision-tracker, adr-writer, tech-spec-writer,
+  structure-designer, cicd-designer, and requirements-questionnaire into a docs/ tree.
 metadata:
   version: "0.1.0"
 ---
@@ -25,6 +23,7 @@ Guide a project from undefined to a complete, internally consistent set of desig
 6. **Respect fixed constraints.** Identify what is non-negotiable (language, cloud, budget, deadline) and design within it.
 7. **Flag risks honestly.** Name the biggest effort/risk items (e.g. anything custom-built) and suggest ways to de-risk (minimal v1, fallbacks).
 8. **Review for consistency** at the end and whenever scope changes — stale cross-references and contradictions are the main failure mode.
+9. **For multi-part areas, run a stage-by-stage deep-dive** — resolve one decision at a time (options → trade-offs → recommend → decide → log), then synthesize into an ADR and a spec section. See `references/decision-facilitation.md`.
 
 ## The passages (run in order; adapt to the project)
 
@@ -40,6 +39,7 @@ Guide a project from undefined to a complete, internally consistent set of desig
 ### 3. Capture cross-cutting decisions
 - Version control, CI/CD, repository layout (mono/poly), environments (staging/prod), IaC, observability/logging, security, testing methodology, architecture approach (e.g. DDD), and any privacy/compliance constraints.
 - Log each with `decision-tracker`.
+- For the **CI/CD pipeline and deployment strategy**, use the `cicd-designer` skill to run the stage-by-stage deep-dive (branching, tests, security, image tagging, environments/secrets, migrations, release strategy, verification/rollback).
 
 ### 4. Write Architecture Decision Records
 - For each significant decision, produce an ADR with the `adr-writer` skill (context, options, trade-offs, consequences). One file per decision under `docs/architecture/adr/`, plus an index.
@@ -80,10 +80,13 @@ docs/
 - Update all relative cross-references when moving files; verify no links break.
 
 ## Companion skills in this plugin
-- `decision-tracker` — maintain the decision log and open questions.
-- `adr-writer` — write ADRs and the ADR index.
-- `tech-spec-writer` — write the technical specification.
-- `structure-designer` — design site/system structure, data models, API.
-- `requirements-questionnaire` — produce a stakeholder questionnaire.
 
-Each companion skill ships a generic template under its `templates/` folder — read it, then fill it from the project's real, researched facts (never ship placeholder text as if it were decided).
+The passages above invoke these by name; see each skill's own description for what it does:
+`decision-tracker`, `adr-writer`, `tech-spec-writer`, `structure-designer`,
+`requirements-questionnaire`, `cicd-designer`.
+
+Each ships a generic template under its `templates/` folder — read it, then fill it from the project's real, researched facts (never ship placeholder text as if it were decided).
+
+## Utilities (shared references)
+- `references/decision-facilitation.md` — the stage-by-stage deep-dive decision method.
+- `references/mermaid-snippets.md` — monochrome Mermaid diagram patterns (architecture, layers, ER, pipeline) used by the tech-spec and structure docs.

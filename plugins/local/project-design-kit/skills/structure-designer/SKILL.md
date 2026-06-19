@@ -1,11 +1,9 @@
 ---
 name: structure-designer
 description: >
-  Use this skill to design the structure and data model of an application. Trigger phrases: "what pages
-  do we need", "design the data model", "what data models do we need", "design the sitemap", "design the
-  API surface", "how should the app be organized", "entity relationships", "URL structure". Produces
-  docs/architecture/STRUCTURE.md with a surface/sitemap, data models, an ER diagram, API endpoints, and
-  (for web) page layout and SEO.
+  Design an application's structure and data model — surface/sitemap, data models with an ER diagram,
+  API endpoints, and (for web) page layout and SEO. Use when the user wants to design the data model,
+  sitemap, API surface, or entity relationships. Produces docs/architecture/STRUCTURE.md.
 metadata:
   version: "0.1.0"
 ---
@@ -37,4 +35,4 @@ Write to `docs/architecture/STRUCTURE.md` from `templates/STRUCTURE.template.md`
 - Every v1 entity that users manage needs corresponding admin endpoints; every browsable entity needs read endpoints and (for web) an archive page.
 - When scope changes, re-scan this doc for stale "optional"/"if used" notes and fix them.
 
-See `templates/STRUCTURE.template.md`.
+See `templates/STRUCTURE.template.md`. Reusable monochrome diagram patterns are in `../design-workflow/references/mermaid-snippets.md`.

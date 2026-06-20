@@ -7,7 +7,7 @@ description: >
   architecture overview, Mermaid diagrams, components, data model, API, infrastructure, CI/CD, testing,
   security, and observability.
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # Tech Spec Writer
@@ -25,7 +25,7 @@ Write to `docs/architecture/TECH-SPEC.md` from `templates/TECH-SPEC.template.md`
 3. **Components** — each deployable/service: responsibilities, key libraries, internal structure (if it follows a pattern like layered/DDD, show the layout and dependency rule, ideally as a Mermaid diagram).
 4. **Data model** — summary of entities and relationships; include a Mermaid `erDiagram`. Full field detail can live in `STRUCTURE.md`.
 5. **API design** — the surfaces (public/admin/etc.), contract conventions, pagination, auth.
-6. **Infrastructure** — hosting, datastore, storage, edge/CDN, secrets, registry, region; a table works well.
+6. **Infrastructure** — hosting, datastore, storage, edge/CDN, secrets, registry, region; a table works well. Include a short **Containerization** subsection that states the Docker file layout (see the convention below).
 7. **CI/CD** — source control, pipelines, environments, migrations; a Mermaid pipeline diagram helps.
 8. **Testing strategy** — the test pyramid and tools if a methodology (e.g. TDD) was chosen.
 9. **Cross-cutting concerns** — security, observability/logging, performance, and (for web) SEO.
@@ -41,6 +41,34 @@ Use Mermaid (renders in most Markdown viewers). To keep diagrams monochrome, pre
 ```
 
 Prefer a clean top-down flow with grouped subgraphs over many crossing arrows; move minor relationships to a sentence under the diagram.
+
+## Docker file layout convention
+
+All Docker-related files must live inside a `docker/` folder — never loose at the repository root. This includes `Dockerfile`s, `docker-compose*.yml`, `.dockerignore`, entrypoint/wait scripts, and any image-specific config.
+
+- **Single configuration** → one `docker/` folder at the repo root:
+  ```
+  docker/
+    Dockerfile
+    docker-compose.yml
+    .dockerignore
+    entrypoint.sh
+  ```
+- **Multiple configurations** (e.g. per service, or per environment) → a separate `docker/` folder for **each** one, namespaced as subfolders:
+  ```
+  docker/
+    api/
+      Dockerfile
+      docker-compose.yml
+    worker/
+      Dockerfile
+    web/
+      Dockerfile
+      docker-compose.yml
+  ```
+  Each configuration owns its own `Dockerfile` (and compose file when it needs one); do not share a single Dockerfile across distinct services.
+
+In Infrastructure/CI-CD, reference these paths by name (e.g. `docker/api/Dockerfile`).
 
 ## Quality
 

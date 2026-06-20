@@ -1,5 +1,4 @@
 {
-  "plansDirectory": ".claude/plans",
   "hooks": {
     "Stop": [
       {
@@ -17,19 +16,9 @@
   },
   "effortLevel": "medium",
   "autoUpdatesChannel": "latest",
+  "plansDirectory": ".claude/plans",
   "theme": "dark",
-  "agentPushNotifEnabled": true,
   "inputNeededNotifEnabled": true,
-  "model": "opus",
-  "enabledPlugins": {
-    "gitkraken-hooks@gitkraken": true
-  },
-  "extraKnownMarketplaces": {
-    "gitkraken": {
-      "source": {
-        "path": "C:\\Users\\Guido.DESKTOP-45P6U2C\\.claude\\plugins\\marketplaces\\gitkraken",
-        "source": "directory"
-      }
-    }
-  }
+  "agentPushNotifEnabled": true,
+  "model": "opus"
 }

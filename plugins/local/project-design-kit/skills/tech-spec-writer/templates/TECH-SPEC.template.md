@@ -75,6 +75,17 @@ erDiagram
 
 [Secrets handling, IaC tool.]
 
+### Containerization
+
+All Docker assets live under a `docker/` folder — one subfolder per configuration when there is more than one. Fill in the actual layout:
+
+```
+docker/
+  [config]/
+    Dockerfile
+    docker-compose.yml
+```
+
 ---
 
 ## 7. CI/CD

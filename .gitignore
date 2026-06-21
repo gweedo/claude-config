@@ -11,6 +11,7 @@ shell-snapshots/
 daemon/
 file-history/
 paste-cache/
+skills/
 
 # Session and conversation history
 sessions/

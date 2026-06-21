@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "siloop"
+version = "0.1.0"
+description = "Self-improvement loop: capture engineering mistakes as approved events, learn the systematic ones, file GitHub issues."
+readme = "IMPLEMENTATION_NOTES.md"
+requires-python = ">=3.8"
+# The pure core (siloop.core) + CLI use only the standard library, so the tool
+# runs and its tests pass with no third-party install. See IMPLEMENTATION_NOTES.md
+# for the small deviations from DESIGN.md (package wrapper, dataclasses, argparse).
+dependencies = []
+
+[project.optional-dependencies]
+# Optional cross-platform advisory file lock for concurrent `loop log` (DESIGN §8).
+# If absent, the store falls back to a no-op lock (single-writer only).
+lock = ["filelock>=3"]
+dev = ["pytest>=7"]
+
+[project.scripts]
+loop = "siloop.cli.main:main"
+
+[tool.setuptools.packages.find]
+include = ["siloop*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,11 @@
+# Python build/cache
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Runtime data (created in $SILOOP_HOME at use time, not part of the tool)
+events.jsonl
+patterns.json
+sessions/
+*.lock

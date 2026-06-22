@@ -62,14 +62,23 @@ constraint, which #1's single-producer design shrinks to a one-line append lock.
 
 ## 3. Repo layout
 
-> Assumed placement inside `gweedo/claude-config`. Adjust once we confirm the repo's
-> existing conventions.
+> **Confirmed home:** `gweedo/claude-config` (the `.claude/` config repo), under `self-improve/`.
+> The *shipped* code layout differs slightly from the package tree below — the Python lives in a
+> `siloop/` package wrapper, with docs grouped under `docs/`. See `IMPLEMENTATION_NOTES.md` for the
+> three intentional deviations (package wrapper, dataclasses, argparse). The tree below is the
+> original design intent, kept for reference.
 
 ```
 claude-config/
 └── self-improve/
-    ├── PROTOCOL.md            # agent rulebook (already drafted)
-    ├── DESIGN.md              # this file
+    ├── README.md             # start-here entry point + docs index
+    ├── docs/
+    │   ├── PROTOCOL.md        # agent rulebook
+    │   ├── DESIGN.md          # this file
+    │   ├── GLOSSARY.md        # domain vocabulary (verdict vs status, pattern_key, fold…)
+    │   ├── STATUS.md          # living state + roadmap
+    │   ├── IMPLEMENTATION_NOTES.md
+    │   └── reviews/           # skill-driven review artifacts
     ├── events.jsonl           # append-only event log (source of truth)
     ├── patterns.json          # pattern registry: key -> rollup (counts, status, issue)
     ├── sessions/

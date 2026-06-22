@@ -3,8 +3,9 @@
 _Last updated: 2026-06-22_
 
 A living snapshot of where the project stands, what's verified, what's left, and the
-skill routing for the remaining work. Companion to `PROTOCOL.md` (rules), `DESIGN.md`
-(architecture), and `IMPLEMENTATION_NOTES.md` (pass-2 deviations).
+skill routing for the remaining work. Companion to `../README.md` (start here),
+`PROTOCOL.md` (rules), `DESIGN.md` (architecture), `GLOSSARY.md` (vocabulary), and
+`IMPLEMENTATION_NOTES.md` (pass-2 deviations).
 
 ---
 

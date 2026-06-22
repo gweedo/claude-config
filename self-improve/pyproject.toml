@@ -6,11 +6,11 @@ build-backend = "setuptools.build_meta"
 name = "siloop"
 version = "0.1.0"
 description = "Self-improvement loop: capture engineering mistakes as approved events, learn the systematic ones, file GitHub issues."
-readme = "IMPLEMENTATION_NOTES.md"
+readme = "README.md"
 requires-python = ">=3.8"
 # The pure core (siloop.core) + CLI use only the standard library, so the tool
-# runs and its tests pass with no third-party install. See IMPLEMENTATION_NOTES.md
-# for the small deviations from DESIGN.md (package wrapper, dataclasses, argparse).
+# runs and its tests pass with no third-party install. See docs/IMPLEMENTATION_NOTES.md
+# for the small deviations from docs/DESIGN.md (package wrapper, dataclasses, argparse).
 dependencies = []
 
 [project.optional-dependencies]

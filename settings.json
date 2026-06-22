@@ -1,5 +1,18 @@
 {
+  "model": "opus",
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$HOME/.claude/hooks/block-dangerous-git.sh\"",
+            "shell": "bash"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
@@ -19,6 +32,5 @@
   "plansDirectory": ".claude/plans",
   "theme": "dark",
   "inputNeededNotifEnabled": true,
-  "agentPushNotifEnabled": true,
-  "model": "opus"
+  "agentPushNotifEnabled": true
 }

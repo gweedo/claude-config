@@ -51,17 +51,18 @@ skill routing for the remaining work. Companion to `PROTOCOL.md` (rules), `DESIG
 
 ## 4. Skill routing for the remaining work (via ask-matt)
 
-`ask-matt` is user-invocation-only (it cannot be called by the model), so its router logic was
-applied manually:
+Confirmed by an actual `ask-matt` run (after enabling model-invocation of the skill):
 
 - There **is a working codebase** and the gaps are **small, well-defined, single-session** — not
-  idea-sharpening and not a multi-session build needing a PRD.
-- Router outcome: the terminal **`/implement`** step ("build it here"), using **`/tdd`** as the
-  technique for the test-first T8 work (red → green for the GitHub adapter contract).
+  idea-sharpening (skip `/grill-with-docs`), no runnable question to prototype, and not a
+  multi-session build needing a PRD (skip `/to-prd` → `/to-issues`).
+- Router outcome: the terminal **`/implement`** step ("build it here, in the same context window").
+- `tdd` is **not** part of ask-matt's router map (it routes the main-flow skills only); TDD is just
+  the *technique* applied inside `/implement` for the test-first T8 contract (red → green).
 - Contrast: the design phase routed to `/grill-me` — different stage, different skill.
 
 ## 5. Recommended next action
 
-Run **`/implement` + `/tdd`** on gap §3.1 (the T8 contract test), then do the §3.2 label setup so
+Run **`/implement`** on gap §3.1 (the T8 contract test, TDD-style), then do the §3.2 label setup so
 the loop can be driven for real. FastAPI / pgvector (§1) stay deferred until the loop has been
 exercised manually a few times.

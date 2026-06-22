@@ -13,8 +13,8 @@ skill routing for the remaining work. Companion to `PROTOCOL.md` (rules), `DESIG
 | Phase | State | Evidence |
 |---|---|---|
 | **Pass 1 — design** | ✅ merged | PR #10. `PROTOCOL.md` + `DESIGN.md`, hardened via skill-driven review (`reviews/`). |
-| **Pass 2 — implementation** | ✅ merged | PR #11. `siloop/` package, **27 tests green**, Python 3.8, zero third-party deps. |
-| **Pass 2 — hardening gaps** | 🚧 in progress | See §3. The GitHub adapter contract test is the one open coverage gap. |
+| **Pass 2 — implementation** | ✅ merged | PR #11. `siloop/` package, Python 3.8, zero third-party deps. |
+| **Pass 2 — hardening gaps** | 🚧 mostly closed | T8 contract test done (PR #13, **33 tests green**); labels created. See §3. |
 | **Phase 3 — FastAPI service** | ⏸ deferred | DESIGN §8. Only when agents need to call the loop over HTTP. |
 | **Future options** | ⏸ deferred | DESIGN §9: pgvector dedup, auto-implement agent, metrics. |
 
@@ -30,17 +30,18 @@ skill routing for the remaining work. Companion to `PROTOCOL.md` (rules), `DESIG
 - **Use cases** — `record_event` verdict/status, **wrap-up idempotency** (no duplicate on rerun),
   **GitHub-down safety** (no create on a failed search), **lossless rebuild through the store**
   (nuke `patterns.json`, reconstruct from `events.jsonl` incl. `issued`/`issue_url`).
+- **GitHub adapter (T8)** — stubbed-HTTP contract: dedup query (`label:self-improve` + `state:open`
+  + exact marker), marker match → ref / non-match → None, **failed search raises** (never silent
+  empty), create/comment/ensure-labels endpoints, 422-on-existing-label non-fatal.
 - **CLI** — smoke-tested end to end (log → recurrence → reject-unknown → list → wrap-up --dry-run).
 
 ## 3. Open gaps (prioritized)
 
-1. **[P0] GitHub adapter contract test — DESIGN §11 T8.** `adapters/github.py` is the only
-   module with no test, and it's the network seam the dedup/idempotency guarantee rests on at
-   runtime. Needs stubbed-HTTP coverage: search query builds the right `label + marker +
-   state:open`; create returns the issue URL; a failed search **raises** (never returns empty).
-   _Blocks pointing the tool at a real repo._
-2. **[P1] Live setup.** Ensure the `self-improve` + `fix:*` labels exist on `gweedo/claude-config`;
-   set `GITHUB_TOKEN`. One-time, required before the first real wrap-up.
+1. ✅ **[done] GitHub adapter contract test — DESIGN §11 T8.** PR #13. The last untested module is
+   now covered; full suite **33 green**, offline.
+2. **[P1, partly done] Live setup.** ✅ `self-improve` + four `fix:*` labels created on
+   `gweedo/claude-config`. Remaining: export the token at run time — `export
+   GITHUB_TOKEN=$(gh auth token)` (the gateway reads `GITHUB_TOKEN`).
 3. **[P1] First real run.** Drive the loop from an actual working session (PROTOCOL §1): log a
    real event when something goes wrong, wrap-up at session end. The only validation against
    reality rather than tests.
@@ -63,6 +64,7 @@ Confirmed by an actual `ask-matt` run (after enabling model-invocation of the sk
 
 ## 5. Recommended next action
 
-Run **`/implement`** on gap §3.1 (the T8 contract test, TDD-style), then do the §3.2 label setup so
-the loop can be driven for real. FastAPI / pgvector (§1) stay deferred until the loop has been
-exercised manually a few times.
+T8 (§3.1) and the labels (§3.2) are done. The next step is the **first real run** (§3.3): export
+`GITHUB_TOKEN=$(gh auth token)` and drive the loop from an actual session — log a real event, then
+`loop wrap-up`. FastAPI / pgvector (§1) and the P2 items stay deferred until the loop has been
+exercised against reality a few times.

@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$HOME/.claude/hooks/block-dangerous-git.sh\"",
+            "command": "case \"$(uname -s)\" in MINGW*|MSYS*|CYGWIN*) powershell -NoProfile -ExecutionPolicy Bypass -File \"$(cygpath -w \"$HOME/.claude/hooks/block-dangerous-git.ps1\")\" ;; *) bash \"$HOME/.claude/hooks/block-dangerous-git.sh\" ;; esac",
             "shell": "bash"
           }
         ]

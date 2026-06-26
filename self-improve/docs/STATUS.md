@@ -1,6 +1,6 @@
 # Self-Improvement Loop — STATUS
 
-_Last updated: 2026-06-22_
+_Last updated: 2026-06-23_
 
 A living snapshot of where the project stands, what's verified, what's left, and the
 skill routing for the remaining work. Companion to `../README.md` (start here),
@@ -19,6 +19,11 @@ skill routing for the remaining work. Companion to `../README.md` (start here),
 | **First real run** | ✅ done | 2026-06-22. Logged a genuine event (`propose-before-confirming-context`, casual) → `list` → `wrap-up` end to end against real storage; recap written, 0 issues (correct for a one-off). |
 | **Phase 3 — FastAPI service** | ⏸ deferred | DESIGN §8. Only when agents need to call the loop over HTTP. |
 | **Future options** | ⏸ deferred | DESIGN §9: pgvector dedup, auto-implement agent, metrics. |
+
+> **Canonical home (2026-06-23):** the project lives in exactly one place —
+> `~/.claude/self-improve/` in the `gweedo/claude-config` repo. The old design-only orphan at
+> `Documents/.../AI Engeeniring/self-improve-loop/` (PR #15 reduced it to a pointer) has now been
+> **deleted** — no leftover duplicates.
 
 ## 2. What is verified (under test)
 

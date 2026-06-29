@@ -1,0 +1,112 @@
+phase: implementation
+# Steps are grouped by build phase. Critical path: P0 -> P1 -> P2 -> P3.
+# Phase 4 depends on P1+P2 (schema + server) but not P3. Phase 5 depends on P3.
+# Each phase lands as its own PR (dogfooding the framework's flow).
+phases:
+  - phase: 0
+    name: Plugin skeleton
+    depends_on: []
+    done_when: "The plugin loads in Claude Code with no errors and lists no commands/agents yet."
+    steps:
+      - id: 0.0
+        file: docs/plan/00_meta.yaml
+        action: "Confirm provisional names before starting: plugin 'agent-orchestra', skill 'domain-expert-init'."
+        status: todo
+      - id: 0.1
+        file: plugins/local/agent-orchestra/.claude-plugin/plugin.json
+        action: "Create plugin manifest with name, version, author."
+        status: todo
+      - id: 0.2
+        file: plugins/local/agent-orchestra/
+        action: "Create directory tree: agents/, skills/, memory-service/, docs/."
+        status: todo
+      - id: 0.3
+        file: plugins/local/agent-orchestra/README.md
+        action: "Write README describing the framework at a glance."
+        status: todo
+
+  - phase: 1
+    name: Memory service (Postgres + pgvector)
+    depends_on: [0]
+    done_when: "docker compose up yields a Postgres with the schema; manual SQL can insert a triple, supersede it (close valid_to), and a recursive-CTE two-hop query returns the expected join result."
+    steps:
+      - id: 1.1
+        file: plugins/local/agent-orchestra/memory-service/docker-compose.yml
+        action: "Define pgvector/pgvector service with a named volume and a localhost-bound port."
+        status: todo
+      - id: 1.2
+        file: plugins/local/agent-orchestra/memory-service/schema.sql
+        action: "Create bitemporal triples(subject, predicate, object, valid_from, valid_to, source_turn) + chunks(id, text, embedding vector, ...); add indexes including an ivfflat/hnsw index on embedding."
+        status: todo
+      - id: 1.3
+        file: plugins/local/agent-orchestra/memory-service/
+        action: "Wire seed/init so schema.sql applies on first 'up'."
+        status: todo
+
+  - phase: 2
+    name: Memory MCP server
+    depends_on: [1]
+    done_when: "With the server registered, a memory_write of triples is retrievable via memory_query (both graph traversal and vector recall), and a re-write of a changed fact supersedes the old one (old fact no longer returned)."
+    steps:
+      - id: 2.1
+        file: plugins/local/agent-orchestra/memory-service/mcp/
+        action: "Build a stdio MCP server (Python) exposing memory_write(triples), memory_query(question), memory_supersede(...); connect to the Postgres container over localhost."
+        status: todo
+      - id: 2.2
+        file: plugins/local/agent-orchestra/memory-service/mcp/
+        action: "Integrate a small local sentence-transformers embedding model for the vector half; no external API."
+        status: todo
+      - id: 2.3
+        file: plugins/local/agent-orchestra/memory-service/mcp/
+        action: "Add entity-linking layer: normalize query phrasing to node names (article bug #1)."
+        status: todo
+      - id: 2.4
+        file: plugins/local/agent-orchestra/memory-service/mcp/
+        action: "Centralize supersede logic: a write that changes a fact closes the prior triple's valid_to (article bug #2)."
+        status: todo
+
+  - phase: 3
+    name: Role agents + Orchestrator
+    depends_on: [2]
+    done_when: "The Orchestrator runs a toy task end-to-end: produces a plan, spawns >=2 role agents that read/write memory, and a later agent recalls an earlier agent's decision from the graph."
+    steps:
+      - id: 3.1
+        file: plugins/local/agent-orchestra/agents/{developer,tester,architect,infrastructure,pm,domain-expert}.md
+        action: "Author the six role agents: responsibility, skill-invocation mapping (reuse existing repo skills), and memory read/write protocol (emit triples at handoff). Architect & Tester include review mode."
+        status: todo
+      - id: 3.2
+        file: plugins/local/agent-orchestra/skills/orchestrator/
+        action: "Build the Orchestrator skill/command: plan -> approve -> per-Phase fan-out via Agent tool -> flush triples -> pause -> next Phase."
+        status: todo
+      - id: 3.3
+        file: plugins/local/agent-orchestra/skills/domain-expert-init/
+        action: "Build the domain-expert-init skill: interview the user and write/update domain-expert.md."
+        status: todo
+
+  - phase: 4
+    name: Scaffold integration (devcontainer-tools)
+    depends_on: [1, 2]
+    done_when: "Scaffolding a fresh project then 'Reopen in Container' gives a working memory service + registered MCP tools with zero manual steps."
+    steps:
+      - id: 4.1
+        file: plugins/.../devcontainer-tools/  # postgres-memory piece
+        action: "Add a postgres-memory piece that drops into a target project: the compose service, schema.sql, MCP config entry, .agent-orchestra/ with a seed domain-expert.md, and devcontainer postCreate wiring to launch the MCP server."
+        status: todo
+      - id: 4.2
+        file: plugins/.../devcontainer-tools/  # ci-parity
+        action: "Add a ci-parity check that the scaffolded memory service comes up cleanly."
+        status: todo
+
+  - phase: 5
+    name: PR review loop
+    depends_on: [3]
+    done_when: "A phase's work lands as a PR that already carries Architect/Tester review comments before the user looks at it."
+    steps:
+      - id: 5.1
+        file: plugins/local/agent-orchestra/skills/orchestrator/
+        action: "At phase end, the Orchestrator opens a PR via gh."
+        status: todo
+      - id: 5.2
+        file: plugins/local/agent-orchestra/agents/{architect,tester}.md
+        action: "Wire Architect/Tester review mode: post findings as PR comments and write issues into the graph; user holds merge approval."
+        status: todo

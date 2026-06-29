@@ -1,0 +1,20 @@
+phase: verification
+# Per-phase acceptance ("done when") lives in 02_steps.yaml. These are the
+# concrete checks/commands to confirm each phase and the whole framework.
+checks:
+  - phase: 0
+    manual: "Load the plugin in Claude Code; confirm no errors and that it lists no commands/agents yet."
+  - phase: 1
+    cmd: "cd plugins/local/agent-orchestra/memory-service && docker compose up -d"
+    manual: "Connect with psql; INSERT a triple, supersede it by closing valid_to, then run a recursive-CTE two-hop query and confirm the expected join result."
+  - phase: 2
+    manual: "Register the MCP server; call memory_write with sample triples; confirm memory_query returns them via both graph traversal and vector recall; re-write a changed fact and confirm memory_query no longer returns the superseded fact."
+  - phase: 3
+    manual: "Run the Orchestrator on a toy task: confirm it produces a plan, spawns >=2 role agents that read/write memory, and a later agent recalls an earlier agent's decision from the graph."
+  - phase: 4
+    cmd: "Run the devcontainer-tools ci-parity check for the scaffolded memory service."
+    manual: "Scaffold a fresh project, 'Reopen in Container', confirm a working memory service + registered MCP tools with zero manual steps."
+  - phase: 5
+    manual: "Complete a phase; confirm it lands as a PR that already carries Architect/Tester review comments before the user reviews; confirm merge stays blocked on user approval."
+  - regression: "Each phase is independently testable and lands as its own PR; earlier phases keep passing as later ones build on them (critical path 0->1->2->3)."
+rollback: "Each phase is its own PR; revert/close the phase PR to undo. The Memory service is one isolated per-project container (docker compose down -v removes it) and the plugin is local, so nothing affects other projects."

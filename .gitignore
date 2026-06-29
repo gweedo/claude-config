@@ -23,3 +23,11 @@ cache/
 downloads/
 backups/
 plugins/plugin-catalog-cache.json
+
+# Plugin marketplace cache (auto-downloaded; plugins/local/ stays tracked)
+plugins/marketplaces/
+plugins/known_marketplaces.json
+
+# Ephemeral runtime artifacts
+chrome/
+tasks/

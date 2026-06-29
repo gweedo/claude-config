@@ -1,0 +1,61 @@
+# agent-orchestra Memory service — walking skeleton (issue #21).
+#
+# One Postgres+pgvector container per project (ADR-0001). The pgvector image is
+# used from the start so the vector half (Phase 2) lands without an image swap,
+# even though the walking skeleton only uses the plain `triples` table.
+#
+# Bring up:   docker compose up -d
+# Tear down:  docker compose down       (keep data)
+#             docker compose down -v     (also drop the volume)
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: agent-orchestra-postgres
+    environment:
+      POSTGRES_USER: orchestra
+      POSTGRES_PASSWORD: orchestra
+      POSTGRES_DB: orchestra
+    ports:
+      # Bound to localhost only — the environment stays fully local (ADR-0002).
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - orchestra-pgdata:/var/lib/postgresql/data
+      # Applies schema.sql on first init (empty data dir only).
+      - ./schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U orchestra -d orchestra"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  # The Memory MCP server (ADR-0002): a stdio process Claude Code launches as a
+  # one-shot container that connects to the postgres service. No ports exposed.
+  # Registered in Claude Code via `docker compose run --rm -T mcp-server`
+  # (see README). Not started by `up`; only run on demand by the MCP client.
+  mcp-server:
+    build: ./mcp
+    profiles: ["mcp"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      MEMORY_DATABASE_URL: postgresql://orchestra:orchestra@postgres:5432/orchestra
+    stdin_open: true
+
+  # Walking-skeleton proof: runs the store-then-read integration test inside the
+  # MCP image against the live postgres service. Not part of the normal runtime;
+  # invoke explicitly:  docker compose run --rm mcp-test
+  mcp-test:
+    build: ./mcp
+    profiles: ["test"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Reach postgres by its service name on the compose network.
+      MEMORY_DATABASE_URL: postgresql://orchestra:orchestra@postgres:5432/orchestra
+    command: ["python", "-m", "pytest", "-v"]
+
+volumes:
+  orchestra-pgdata:

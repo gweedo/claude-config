@@ -1,0 +1,35 @@
+phase: discovery
+status: done
+key_files:
+  - plugins/local/agent-orchestra/CONTEXT.md            # vocabulary/glossary, source of truth for naming
+  - plugins/local/agent-orchestra/docs/BUILD-PLAN.md    # the 6-phase plan being formalized here
+  - plugins/local/agent-orchestra/docs/adr/0001-claude-native-agents-with-durable-postgres-memory.md
+  - plugins/local/agent-orchestra/docs/adr/0002-local-stdio-mcp-server-as-memory-interface.md
+  - plugins/local/agent-orchestra/docs/adr/0003-subagent-delegation-and-phase-gated-pr-workflow.md
+deps_relevant:
+  - pgvector/pgvector            # Postgres image carrying the vector extension
+  - docker-compose               # one memory container per project
+  - mcp (stdio transport)        # Claude Code launches the Memory MCP server in the devcontainer
+  - sentence-transformers        # small local embedding model for the vector half
+  - gh                           # PR creation + review comments at the phase gate
+  - devcontainer-tools (plugin)  # gains the postgres-memory scaffold piece (Phase 4)
+patterns:
+  existing_skills_to_reuse:      # role agents map to these, per ADR-0003 consequences
+    developer: [implement, tdd]
+    tester: [tdd, diagnosing-bugs]
+    architect: [codebase-design, project-design-kit]
+    infrastructure: [devcontainer-tools, cicd-designer]
+    pm: [to-prd, to-issues]
+    domain-expert: [domain-modeling]   # plus per-project domain-expert.md
+  plugin_layout: "plugins/local/agent-orchestra/{.claude-plugin/plugin.json, agents/, skills/, memory-service/, docs/}"
+  triple_shape: "(subject, predicate, object) e.g. (AuthModule, DEPENDS_ON, RateLimiter)"
+gaps:
+  - plugin_skeleton_absent        # only CONTEXT.md + docs/ exist today; no plugin.json, agents/, skills/, memory-service/
+  - memory_service_unbuilt        # no docker-compose.yml / schema.sql
+  - memory_mcp_server_unbuilt     # no stdio server, no entity-linking or supersede logic
+  - role_agents_and_orchestrator_unbuilt
+  - scaffold_piece_absent         # devcontainer-tools has no postgres-memory piece yet
+  - pr_review_loop_unbuilt
+known_article_bugs_to_handle:
+  - entity_linking: "normalize query phrasing -> node names (article bug #1), lives in MCP server"
+  - supersede: "writes close prior valid_to (article bug #2), centralized in MCP server"

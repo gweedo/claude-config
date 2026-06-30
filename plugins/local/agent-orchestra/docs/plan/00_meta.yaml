@@ -1,0 +1,20 @@
+project: agent-orchestra
+stack: [claude-code-plugin, postgres, pgvector, python, mcp-stdio, docker-compose]
+goal: "Build the agent-orchestra Claude Code-native multi-agent framework: a per-project Orchestrator that delegates to 6 role-agent subagents sharing a durable Postgres+pgvector Memory service reached via a local stdio Memory MCP server, with a plan-gated phase->PR->pre-review workflow."
+constraints:
+  - claude_native_constructs_only      # agents + skills/commands, not a standalone runtime (ADR-0001)
+  - durable_memory_must_outlive_session # reject per-session in-process graph (ADR-0001)
+  - one_postgres_pgvector_container_per_project # no shared multi-project instance (ADR-0001)
+  - postgres_only_no_neo4j             # graph as bitemporal triples + recursive CTEs (ADR-0001)
+  - memory_only_via_mcp_stdio          # no raw SQL, no CLI, no HTTP/SSE (ADR-0002)
+  - triple_extraction_is_agent_side    # server does no LLM extraction, no external API key (ADR-0002)
+  - local_embedding_model_only         # the only model the server needs (ADR-0002)
+  - supersede_not_delete               # bitemporal valid_to, centralized in MCP server (ADR-0002)
+  - subagents_isolated_context         # graph is the only shared memory (ADR-0003)
+  - phase_boundaries_are_write_points  # flush triples at phase end (ADR-0003)
+  - user_holds_merge_approval          # review is a mode of Architect+Tester, not a role (ADR-0003)
+  - role_agents_reuse_existing_skills  # do not re-derive workflow (ADR-0003)
+  - confirm_names_before_phase0        # plugin agent-orchestra, skill domain-expert-init
+  - each_phase_lands_as_its_own_pr     # dogfood the framework's own flow
+status: draft
+created: 2026-06-29

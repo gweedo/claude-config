@@ -1,0 +1,9 @@
+{
+  "name": "agent-orchestra",
+  "version": "0.1.0",
+  "description": "A Claude Code-native multi-agent framework: a per-project Orchestrator delegates to specialized role agents that share a durable Postgres+pgvector Memory service reached only via a local stdio Memory MCP server.",
+  "author": {
+    "name": "ThisGweedo",
+    "email": "guido.s1998@gmail.com"
+  }
+}

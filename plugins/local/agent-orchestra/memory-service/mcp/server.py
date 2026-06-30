@@ -1,9 +1,10 @@
 """Memory MCP server (stdio) — the only interface to memory (ADR-0002).
 
-Walking skeleton (issue #21): exposes `memory_write` and `memory_query` over the
-stdio transport. `memory_supersede`, entity-linking, and vector recall arrive in
-Phase 2. All DB work is delegated to MemoryStore; this module is just the
-MCP transport + tool schemas.
+Exposes `memory_write`, `memory_query`, and `memory_supersede` over the stdio
+transport. `memory_query` answers both direct subject lookups and multi-hop
+"join" questions (issue #22); `memory_supersede` closes a stale fact. Entity-
+linking (#25) and vector recall (#23) arrive later. All DB work is delegated to
+MemoryStore; this module is just the MCP transport + tool schemas.
 
 Run:  python -m server            (from this directory, with deps installed)
 """
@@ -42,12 +43,22 @@ def memory_write(triples: list[dict]) -> str:
 
 
 @mcp.tool()
-def memory_query(subject: str) -> str:
+def memory_query(subject: str, traverse: bool = False) -> str:
     """Recall facts about a subject from the Context graph.
 
-    Returns matching triples as JSON. For the walking skeleton this is a direct
-    subject match; richer traversal + vector recall arrive in later phases.
+    With `traverse=False` (default) this returns the current triples whose
+    subject matches, as JSON. Superseded facts are never returned.
+
+    With `traverse=True` it answers a multi-hop "join" question: it walks the
+    graph from `subject` and returns every node reached with its hop `depth` and
+    the final-hop `predicate`. Use this when the answer is not in any single
+    triple — e.g. what a module *transitively* reaches two hops out.
     """
+    if traverse:
+        paths = _store.query_join(subject)
+        return json.dumps(
+            [{"object": p.object, "predicate": p.predicate, "depth": p.depth} for p in paths]
+        )
     results = _store.query_triples(subject)
     return json.dumps(
         [
@@ -60,6 +71,19 @@ def memory_query(subject: str) -> str:
             for t in results
         ]
     )
+
+
+@mcp.tool()
+def memory_supersede(subject: str, predicate: str, object: str) -> str:
+    """Mark a fact no longer current when a newer one replaces it.
+
+    Closes the matching current triple's `valid_to` (bitemporal) rather than
+    deleting it, so history is retained but queries stop returning it (ADR-0002,
+    CONTEXT.md "Supersede"). Write the replacement fact separately via
+    `memory_write`. Returns how many triples were closed.
+    """
+    closed = _store.supersede(subject=subject, predicate=predicate, object=object)
+    return f"superseded {closed} triple(s)"
 
 
 if __name__ == "__main__":

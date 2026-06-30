@@ -9,7 +9,9 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY memory_store.py server.py test_store_then_read.py test_mcp_protocol.py ./
+# Copy the server, its store, and the integration tests. Globbing the test
+# files keeps the build from needing an edit each time a test is added (#22).
+COPY memory_store.py server.py test_*.py ./
 
 # stdio transport — no ports exposed.
 CMD ["python", "server.py"]

@@ -19,22 +19,31 @@ See [`CONTEXT.md`](CONTEXT.md) for the ubiquitous language,
 
 ## Status
 
-Early build. Implemented so far (issue #21 — walking skeleton):
+Early build. Implemented so far:
 
 - Plugin skeleton (this directory).
 - [`memory-service/`](memory-service/) — Postgres + pgvector container with a
-  minimal `triples` table and a stdio Memory MCP server exposing `memory_write`
-  and `memory_query`, with a store-then-read integration proof.
+  bitemporal `triples` table and a stdio Memory MCP server exposing
+  `memory_write`, `memory_query` (direct + multi-hop traversal), and
+  `memory_supersede` (issues #21–#22).
+- [`agents/developer.md`](agents/developer.md) and
+  [`agents/architect.md`](agents/architect.md) — the first two role agents,
+  each spawned as an isolated subagent that reads/writes the Context graph at
+  handoff (issue #24).
+- [`skills/orchestrator/`](skills/orchestrator/) — the plan-gated Orchestrator
+  skill: produces a plan, waits for user approval, then fans out to the
+  Developer and Architect subagents in sequence so the Architect can recall the
+  Developer's decision from the graph (issue #24 — the multi-agent proof).
 
-Role agents, the Orchestrator, superseding, vector recall, and the scaffold
-integration land in later phases (issues #22–#28).
+The remaining four role agents (Tester, Infrastructure, PM, Domain Expert),
+Review mode, and the scaffold integration land in later issues (#25–#28).
 
 ## Layout
 
 | Path | What |
 |------|------|
 | `.claude-plugin/plugin.json` | Plugin manifest |
-| `agents/` | Role-agent definitions (Phase 3) |
-| `skills/` | Orchestrator + supporting skills (Phase 3) |
+| `agents/` | Role-agent definitions — `developer.md`, `architect.md` so far |
+| `skills/orchestrator/` | Plan-gated Orchestrator skill (plan → approve → fan out → memory) |
 | `memory-service/` | Postgres container + Memory MCP server |
 | `docs/` | CONTEXT, ADRs, build plan |

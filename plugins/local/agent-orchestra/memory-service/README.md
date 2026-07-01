@@ -30,6 +30,7 @@ Entity-linking (#25) arrives later.
 | `mcp/test_supersede.py` | Bitemporal supersede proof (#22) |
 | `mcp/test_vector_recall.py` | Local-embedding semantic recall + same-container graph+vector proof (#23) |
 | `mcp/test_mcp_*.py` | MCP stdio round-trip proofs for the exposed tools |
+| `mcp/test_agent_handoff_recall.py` | Later-agent-recalls-earlier-agent's-decision proof, over two isolated MCP sessions (#24) |
 
 ## Run the database
 

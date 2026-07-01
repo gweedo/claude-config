@@ -19,13 +19,15 @@ See [`CONTEXT.md`](CONTEXT.md) for the ubiquitous language,
 
 ## Status
 
-Early build. Implemented so far:
+Early build. Implemented so far (issues #21–#24):
 
 - Plugin skeleton (this directory).
 - [`memory-service/`](memory-service/) — Postgres + pgvector container with a
-  bitemporal `triples` table and a stdio Memory MCP server exposing
-  `memory_write`, `memory_query` (direct + multi-hop traversal), and
-  `memory_supersede` (issues #21–#22).
+  bitemporal `triples` table (graph recall, incl. multi-hop traversal and
+  supersede) and a `chunks` table with an ivfflat ANN index (vector recall via
+  a local embedding model, no external API), reached through a stdio Memory
+  MCP server exposing `memory_write`, `memory_query`, and `memory_supersede`
+  (issues #21–#23).
 - [`agents/developer.md`](agents/developer.md) and
   [`agents/architect.md`](agents/architect.md) — the first two role agents,
   each spawned as an isolated subagent that reads/writes the Context graph at
@@ -36,7 +38,8 @@ Early build. Implemented so far:
   Developer's decision from the graph (issue #24 — the multi-agent proof).
 
 The remaining four role agents (Tester, Infrastructure, PM, Domain Expert),
-Review mode, and the scaffold integration land in later issues (#25–#28).
+Review mode, entity-linking, and the scaffold integration land in later issues
+(#25–#28).
 
 ## Layout
 

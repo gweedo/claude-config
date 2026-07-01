@@ -52,10 +52,11 @@ async def _run() -> None:
 
             result = await session.call_tool("memory_query", {"subject": subject})
             payload = json.loads(result.content[0].text)
-            assert len(payload) == 1, payload
-            assert payload[0]["subject"] == subject
-            assert payload[0]["predicate"] == "EMITS"
-            assert payload[0]["object"] == "PaymentReceived"
+            triples = payload["triples"]
+            assert len(triples) == 1, payload
+            assert triples[0]["subject"] == subject
+            assert triples[0]["predicate"] == "EMITS"
+            assert triples[0]["object"] == "PaymentReceived"
 
     print("MCP protocol round-trip OK: memory_write + memory_query exposed and working")
 

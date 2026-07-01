@@ -15,8 +15,14 @@ Two ideas from issue #22 live here:
   answer "join" questions no single triple holds (the article's differentiator
   over vector similarity).
 
-Forward-looking note: entity-linking (#25) and vector recall (#23) will join
-these here. For now querying is exact subject matching.
+Vector recall (#23) lives here too: free text is embedded by a local
+sentence-transformers model (loaded once, lazily, at process start — no
+external API/key, per ADR-0002) and stored in the `chunks` table; queries embed
+the question the same way and rank chunks by cosine distance via pgvector's
+`<=>` operator. Graph and vector recall are independent methods on the same
+store, reading/writing the same live Postgres container.
+
+Forward-looking note: entity-linking (#25) will join these here.
 """
 
 from __future__ import annotations
@@ -26,6 +32,11 @@ from dataclasses import dataclass
 from typing import Iterable
 
 import psycopg
+from pgvector.psycopg import register_vector
+
+# Small, CPU-friendly, fully local model — no external API/key (ADR-0002).
+# 384-dim output, matching the `chunks.embedding` column in schema.sql.
+_EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 
 
 @dataclass(frozen=True)
@@ -53,6 +64,46 @@ class Path:
     depth: int
 
 
+@dataclass(frozen=True)
+class Chunk:
+    """A stored piece of free text recalled by meaning, not exact match.
+
+    The unit of vector recall (#23), analogous to `Triple` for the graph half.
+    `distance` is the cosine distance from the query embedding (lower = more
+    similar); it is None for a freshly written chunk that was not returned by
+    a similarity search.
+    """
+
+    text: str
+    source_turn: str | None = None
+    distance: float | None = None
+
+
+_model = None
+
+
+def _embedding_model():
+    """Lazily load the local embedding model (once per process).
+
+    Loaded on first use rather than at import time so importing this module
+    (e.g. for the store-then-read graph tests) never pays the model-load cost.
+    No network access at call time — the Dockerfile pre-downloads the weights
+    into the image, so this is a local, offline load (ADR-0002).
+    """
+    global _model
+    if _model is None:
+        from sentence_transformers import SentenceTransformer
+
+        _model = SentenceTransformer(_EMBEDDING_MODEL_NAME)
+    return _model
+
+
+def embed(text: str) -> list[float]:
+    """Embed `text` with the local model. Returns a 384-dim vector."""
+    vector = _embedding_model().encode(text, normalize_embeddings=True)
+    return vector.tolist()
+
+
 def connection_string() -> str:
     """Postgres DSN for the per-project Memory container.
 
@@ -71,6 +122,16 @@ class MemoryStore:
 
     def __init__(self, dsn: str | None = None) -> None:
         self._dsn = dsn or connection_string()
+
+    def _connect(self) -> psycopg.Connection:
+        """Open a connection with the pgvector type adapter registered.
+
+        Every method that touches `chunks` needs this so the `vector` column
+        round-trips as a Python list rather than pgvector's raw text format.
+        """
+        conn = psycopg.connect(self._dsn)
+        register_vector(conn)
+        return conn
 
     def write_triples(self, triples: Iterable[Triple]) -> int:
         """Store triples. Returns the number written."""
@@ -169,3 +230,43 @@ class MemoryStore:
             closed = cur.rowcount
             conn.commit()
         return closed
+
+    def write_chunk(self, text: str, *, source_turn: str | None = None) -> int:
+        """Embed `text` with the local model and store it for vector recall.
+
+        Returns 1 on success (mirrors `write_triples`' "count written" shape).
+        No external API call — embedding happens in-process (ADR-0002).
+        """
+        vector = embed(text)
+        with self._connect() as conn, conn.cursor() as cur:
+            cur.execute(
+                "INSERT INTO chunks (text, embedding, source_turn) VALUES (%s, %s, %s)",
+                (text, vector, source_turn),
+            )
+            conn.commit()
+        return 1
+
+    def query_chunks(self, query: str, *, top_k: int = 5) -> list[Chunk]:
+        """Recall the `top_k` chunks most semantically similar to `query`.
+
+        Embeds `query` with the same local model used to write chunks, then
+        ranks stored chunks by cosine distance via pgvector's `<=>` operator
+        (ANN search using the `chunks_embedding_idx` ivfflat index). This is
+        the vector-recall counterpart to `query_triples`/`query_join` — it
+        answers free-text questions no exact subject match or graph traversal
+        can, and always ranks by similarity rather than requiring a threshold.
+        """
+        vector = embed(query)
+        with self._connect() as conn, conn.cursor() as cur:
+            # Probe more of the ivfflat index than the default (1) so recall
+            # stays good as the table grows past the small size `lists` was
+            # tuned for (schema.sql) — cheap for a per-project, low-QPS store.
+            cur.execute("SET ivfflat.probes = 10")
+            cur.execute(
+                "SELECT text, source_turn, embedding <=> %s::vector AS distance "
+                "FROM chunks ORDER BY distance ASC LIMIT %s",
+                (vector, top_k),
+            )
+            return [
+                Chunk(text=r[0], source_turn=r[1], distance=r[2]) for r in cur.fetchall()
+            ]

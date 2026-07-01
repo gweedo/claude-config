@@ -1,3 +1,6 @@
 mcp>=1.2.0
 psycopg[binary]>=3.1
 pytest>=8.0
+# Local embedding model for vector recall (#23) — no external API/key.
+sentence-transformers>=3.0
+pgvector>=0.3

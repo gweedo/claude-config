@@ -19,6 +19,7 @@ skill routing for the remaining work. Companion to `../README.md` (start here),
 | **First real run** | ✅ done | 2026-06-22. Logged a genuine event (`propose-before-confirming-context`, casual) → `list` → `wrap-up` end to end against real storage; recap written, 0 issues (correct for a one-off). |
 | **Phase 3 — FastAPI service** | ⏸ deferred | DESIGN §8. Only when agents need to call the loop over HTTP. |
 | **Future options** | ⏸ deferred | DESIGN §9: pgvector dedup, auto-implement agent, metrics. |
+| **Footgun surfacing** | ✅ shipped (hook layer) | `docs/FOOTGUN_SURFACING.md` — issue #32. `footguns.json` + `hooks/footgun-nudge.sh`/`.ps1` on `PreToolUse` (`Edit\|Write`). Orchestrator-side injection deferred — agent-orchestra has no dispatch code yet. |
 
 > **Canonical home (2026-06-23):** the project lives in exactly one place —
 > `~/.claude/self-improve/` in the `gweedo/claude-config` repo. The old design-only orphan at

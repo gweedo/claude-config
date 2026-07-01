@@ -16,6 +16,16 @@
             "shell": "bash"
           }
         ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "case \"$(uname -s)\" in MINGW*|MSYS*|CYGWIN*) powershell -NoProfile -ExecutionPolicy Bypass -File \"$(cygpath -w \"$HOME/.claude/hooks/footgun-nudge.ps1\")\" ;; *) bash \"$HOME/.claude/hooks/footgun-nudge.sh\" ;; esac",
+            "shell": "bash"
+          }
+        ]
       }
     ],
     "Stop": [

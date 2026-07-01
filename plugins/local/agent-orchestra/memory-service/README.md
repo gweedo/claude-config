@@ -22,6 +22,7 @@ later.
 | `mcp/test_two_hop_join.py` | Multi-hop recursive-CTE traversal proof (#22) |
 | `mcp/test_supersede.py` | Bitemporal supersede proof (#22) |
 | `mcp/test_mcp_*.py` | MCP stdio round-trip proofs for the exposed tools |
+| `mcp/test_agent_handoff_recall.py` | Later-agent-recalls-earlier-agent's-decision proof, over two isolated MCP sessions (#24) |
 
 ## Run the database
 

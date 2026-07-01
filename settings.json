@@ -9,6 +9,11 @@
             "type": "command",
             "command": "case \"$(uname -s)\" in MINGW*|MSYS*|CYGWIN*) powershell -NoProfile -ExecutionPolicy Bypass -File \"$(cygpath -w \"$HOME/.claude/hooks/block-dangerous-git.ps1\")\" ;; *) bash \"$HOME/.claude/hooks/block-dangerous-git.sh\" ;; esac",
             "shell": "bash"
+          },
+          {
+            "type": "command",
+            "command": "case \"$(uname -s)\" in MINGW*|MSYS*|CYGWIN*) powershell -NoProfile -ExecutionPolicy Bypass -File \"$(cygpath -w \"$HOME/.claude/hooks/verify-outcome-nudge.ps1\")\" ;; *) bash \"$HOME/.claude/hooks/verify-outcome-nudge.sh\" ;; esac",
+            "shell": "bash"
           }
         ]
       }

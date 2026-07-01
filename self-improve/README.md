@@ -68,6 +68,7 @@ and roadmap: **`docs/STATUS.md`**.
 | See current state, gaps, and next steps | `docs/STATUS.md` |
 | Know how the shipped code deviates from the design | `docs/IMPLEMENTATION_NOTES.md` |
 | See the review process that hardened the design | `docs/reviews/` |
+| See how catalogued footguns surface automatically at write-time | `docs/FOOTGUN_SURFACING.md` |
 
 ## Layout
 
@@ -75,10 +76,17 @@ and roadmap: **`docs/STATUS.md`**.
 self-improve/
 ├── README.md          # you are here
 ├── docs/              # PROTOCOL · DESIGN · GLOSSARY · STATUS · IMPLEMENTATION_NOTES · reviews/
+│                       # · FOOTGUN_SURFACING (catalog + PreToolUse hook design)
+├── footguns.json       # standing "never X; always Y" catalog, matched by hooks/footgun-nudge.*
 ├── siloop/            # the package: core/ (pure logic) · cli/ · adapters/
 ├── tests/             # the DESIGN §11 suite
 └── pyproject.toml
 ```
+
+`footguns.json` is a separate, hand-curated catalog — not derived by `fold()` like
+`patterns.json`. See `docs/FOOTGUN_SURFACING.md` for why they're kept apart and how
+`hooks/footgun-nudge.sh` / `.ps1` surface an entry automatically when a matching file is
+edited.
 
 `siloop/core/` is pure (no I/O); persistence, network, and pattern-matching sit behind
 ports so the same use cases drive the CLI today and a FastAPI service later. That

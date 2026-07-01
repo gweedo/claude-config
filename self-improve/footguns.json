@@ -1,0 +1,19 @@
+{
+  "footguns": [
+    {
+      "id": "db-engine-missing-entra-token-listener",
+      "rule": "Never create a DB engine/connection pool against an Azure-hosted SQL/Postgres target without registering the Entra (Azure AD) token-refresh connection listener.",
+      "why": "Without the listener, the pool is opened once with a token that later expires; reconnects then fail auth silently instead of picking up a fresh token. This was the root cause of a prior production incident, and it reappeared in a new code path because the catalogued fix existed but wasn't consulted at write-time.",
+      "area_globs": [
+        "**/db.py",
+        "**/database.py",
+        "**/*_engine.py",
+        "**/engine.py",
+        "**/connection*.py",
+        "**/*db_session*.py"
+      ],
+      "source": "retrospective-skills-orchestrator-2026-06-25.md; gweedo/claude-config#32",
+      "added": "2026-07-01"
+    }
+  ]
+}

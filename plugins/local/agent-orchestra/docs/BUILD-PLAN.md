@@ -42,11 +42,11 @@ query returns the expected join result.
 The sole interface to memory (ADR-0002).
 
 - `memory-service/mcp/` — stdio MCP server (Python recommended: pgvector +
-  embeddings ecosystem). Tools: `memory_write(triples)`, `memory_query(question)`,
-  `memory_supersede(...)`.
-- Local embedding model (small sentence-transformers) for the vector half.
+  embeddings ecosystem). Tools: `memory_write(triples, chunks)`,
+  `memory_query(subject, traverse, text, top_k)`, `memory_supersede(...)`.
+- Local embedding model (small sentence-transformers) for the vector half. ✅ #23
 - Entity-linking layer: normalize query phrasing → node names (article bug #1).
-- Supersede logic centralized here (article bug #2): writes close prior `valid_to`.
+- Supersede logic centralized here (article bug #2): writes close prior `valid_to`. ✅ #22
 
 **Done when:** with the server registered, a `memory_write` of triples is
 retrievable via `memory_query` (both graph traversal and vector recall), and a

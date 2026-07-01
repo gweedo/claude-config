@@ -19,15 +19,17 @@ See [`CONTEXT.md`](CONTEXT.md) for the ubiquitous language,
 
 ## Status
 
-Early build. Implemented so far (issue #21 — walking skeleton):
+Early build. Implemented so far (issues #21–#23):
 
 - Plugin skeleton (this directory).
 - [`memory-service/`](memory-service/) — Postgres + pgvector container with a
-  minimal `triples` table and a stdio Memory MCP server exposing `memory_write`
-  and `memory_query`, with a store-then-read integration proof.
+  bitemporal `triples` table (graph recall, incl. multi-hop traversal and
+  supersede) and a `chunks` table with an ivfflat ANN index (vector recall via
+  a local embedding model, no external API), reached through a stdio Memory
+  MCP server exposing `memory_write`, `memory_query`, and `memory_supersede`.
 
-Role agents, the Orchestrator, superseding, vector recall, and the scaffold
-integration land in later phases (issues #22–#28).
+Role agents, the Orchestrator, entity-linking, and the scaffold integration
+land in later phases (issues #24–#28).
 
 ## Layout
 

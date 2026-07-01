@@ -49,7 +49,7 @@ async def _run() -> None:
 
             result = await session.call_tool("memory_query", {"subject": subject})
             payload = json.loads(result.content[0].text)
-            objects = {row["object"] for row in payload}
+            objects = {row["object"] for row in payload["triples"]}
             assert objects == {"JWT"}, payload
 
     print("MCP supersede round-trip OK: memory_supersede exposed and stale fact hidden")

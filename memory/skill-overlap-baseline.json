@@ -1,0 +1,20 @@
+[
+  {
+    "artifact": "orchestrator",
+    "artifact_type": "skill",
+    "overlap_name": "Claude Orchestrator Plugin / claude-code-workflow-orchestration",
+    "source": "web-search",
+    "recommendation": "Monitor",
+    "reason": "Custom skill is agent-orchestra-specific (Memory MCP, plan-gating); community plugins are more generic orchestrators",
+    "first_flagged": "2026-07-18"
+  },
+  {
+    "artifact": "devcontainer-init",
+    "artifact_type": "skill",
+    "overlap_name": "devcontainer-setup (trailofbits)",
+    "source": "web-search",
+    "recommendation": "Keep (customized)",
+    "reason": "Custom skill uses project-specific reference templates (node/python/generic); published skill is a direct functional overlap but lacks the custom defaults",
+    "first_flagged": "2026-07-18"
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "artifact": "file-review",
+    "artifact_type": "skill",
+    "overlap_name": "code-review",
+    "source": "live-marketplace",
+    "recommendation": "Monitor",
+    "reason": "Partial overlap — custom skill reviews any file ad-hoc; marketplace plugin targets PR-level automated review. Different scopes.",
+    "first_flagged": "2026-10-05"
+  },
+  {
+    "artifact": "design-workflow",
+    "artifact_type": "skill",
+    "overlap_name": "feature-dev",
+    "source": "live-marketplace",
+    "recommendation": "Monitor",
+    "reason": "Partial overlap — custom skill is design/planning-only before code; feature-dev is broader development orchestration.",
+    "first_flagged": "2026-10-05"
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "artifact": "file-review",
+    "artifact_type": "skill",
+    "overlap_name": "code-review",
+    "source": "live-marketplace",
+    "recommendation": "Monitor",
+    "first_flagged": "2026-10-08"
+  },
+  {
+    "artifact": "adr-writer",
+    "artifact_type": "skill",
+    "overlap_name": "architecture-decision-record (yonatangross/skillforge-claude-plugin)",
+    "source": "web-search",
+    "recommendation": "Keep (customized)",
+    "first_flagged": "2026-10-08"
+  },
+  {
+    "artifact": "devcontainer-init",
+    "artifact_type": "skill",
+    "overlap_name": "devcontainer-setup (trailofbits/skills)",
+    "source": "web-search",
+    "recommendation": "Monitor",
+    "first_flagged": "2026-10-08"
+  },
+  {
+    "artifact": "cicd-designer",
+    "artifact_type": "skill",
+    "overlap_name": "cicd-automation (wshobson/agents)",
+    "source": "web-search",
+    "recommendation": "Monitor",
+    "first_flagged": "2026-10-08"
+  },
+  {
+    "artifact": "plan-writer",
+    "artifact_type": "agent",
+    "overlap_name": "cc-plan-mode (quochuydev)",
+    "source": "web-search",
+    "recommendation": "Monitor",
+    "first_flagged": "2026-10-08"
+  },
+  {
+    "artifact": "test-writer",
+    "artifact_type": "agent",
+    "overlap_name": "qa-test-planner (softaworks/agent-toolkit)",
+    "source": "web-search",
+    "recommendation": "Monitor",
+    "first_flagged": "2026-10-08"
+  }
+]

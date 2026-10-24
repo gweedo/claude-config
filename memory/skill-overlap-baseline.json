@@ -1,0 +1,18 @@
+[
+  {
+    "artifact": "file-review",
+    "artifact_type": "skill",
+    "overlap_name": "code-review",
+    "source": "live-marketplace",
+    "recommendation": "Monitor",
+    "first_flagged": "2026-10-24"
+  },
+  {
+    "artifact": "design-workflow",
+    "artifact_type": "skill",
+    "overlap_name": "feature-dev",
+    "source": "live-marketplace",
+    "recommendation": "Monitor",
+    "first_flagged": "2026-10-24"
+  }
+]

@@ -1,0 +1,65 @@
+[
+  {
+    "artifact": "file-review",
+    "artifact_type": "skill",
+    "overlap_name": "code-review",
+    "source": "live-marketplace",
+    "recommendation": "Monitor",
+    "reason": "code-review (marketplace) and file-review both review code for quality/correctness; file-review is more generic/stack-agnostic while marketplace version targets PR diffs",
+    "first_flagged": "2026-10-25"
+  },
+  {
+    "artifact": "orchestrator",
+    "artifact_type": "skill",
+    "overlap_name": "outputai",
+    "source": "live-marketplace",
+    "recommendation": "Keep (customized)",
+    "reason": "orchestrator is purpose-built for agent-orchestra with Postgres+pgvector memory; outputai is a general workflow toolkit — core multi-agent purpose overlaps but implementation is project-specific",
+    "first_flagged": "2026-10-25"
+  },
+  {
+    "artifact": "tech-spec-writer",
+    "artifact_type": "skill",
+    "overlap_name": "mattpocock-skills",
+    "source": "live-marketplace",
+    "recommendation": "Monitor",
+    "reason": "mattpocock-skills covers spec and ticket flows alongside TDD and code review; tech-spec-writer is narrowly focused on TECH-SPEC.md generation with Mermaid diagrams",
+    "first_flagged": "2026-10-25"
+  },
+  {
+    "artifact": "test-writer",
+    "artifact_type": "agent",
+    "overlap_name": "mattpocock-skills",
+    "source": "live-marketplace",
+    "recommendation": "Monitor",
+    "reason": "mattpocock-skills includes TDD flows; test-writer generates a full phased test plan and writes tests — genuine workflow overlap",
+    "first_flagged": "2026-10-25"
+  },
+  {
+    "artifact": "devcontainer-init",
+    "artifact_type": "skill",
+    "overlap_name": "devcontainer-setup (Trail of Bits / shipshitdev)",
+    "source": "web-search",
+    "recommendation": "Monitor",
+    "reason": "community devcontainer-setup skills scaffold .devcontainer with similar Node/Python/Rust support; user's skill may have project-specific Claude Code feature pins and conventions",
+    "first_flagged": "2026-10-25"
+  },
+  {
+    "artifact": "adr-writer",
+    "artifact_type": "skill",
+    "overlap_name": "adr-author / ssot-adr (community)",
+    "source": "web-search",
+    "recommendation": "Monitor",
+    "reason": "multiple community ADR-writer skills exist (adr-author, ssot-adr on claudskills.com) with similar core purpose; user's skill has custom templates under adr-writer/templates/",
+    "first_flagged": "2026-10-25"
+  },
+  {
+    "artifact": "project-scaffolder",
+    "artifact_type": "agent",
+    "overlap_name": "fltman Claude Code Project Scaffolder",
+    "source": "web-search",
+    "recommendation": "Monitor",
+    "reason": "community project-scaffolder on GitHub covers similar wizard-style project bootstrapping; user's agent is more comprehensive (dev containers, CI/CD, multi-stack)",
+    "first_flagged": "2026-10-25"
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "artifact": "file-review",
+    "artifact_type": "skill",
+    "overlap_name": "code-review",
+    "source": "live-marketplace",
+    "recommendation": "Monitor",
+    "first_flagged": "2026-11-01"
+  },
+  {
+    "artifact": "orchestrator",
+    "artifact_type": "skill",
+    "overlap_name": "feature-dev",
+    "source": "live-marketplace",
+    "recommendation": "Keep (customized)",
+    "first_flagged": "2026-11-01"
+  },
+  {
+    "artifact": "adr-writer",
+    "artifact_type": "skill",
+    "overlap_name": "architecture-decision-records",
+    "source": "web-search",
+    "recommendation": "Monitor",
+    "first_flagged": "2026-11-01"
+  },
+  {
+    "artifact": "devcontainer-init",
+    "artifact_type": "skill",
+    "overlap_name": "devcontainer-setup",
+    "source": "web-search",
+    "recommendation": "Monitor",
+    "first_flagged": "2026-11-01"
+  },
+  {
+    "artifact": "test-writer",
+    "artifact_type": "agent",
+    "overlap_name": "unit-testing",
+    "source": "web-search",
+    "recommendation": "Monitor",
+    "first_flagged": "2026-11-01"
+  }
+]

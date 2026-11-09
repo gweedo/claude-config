@@ -1,0 +1,42 @@
+[
+  {
+    "artifact": "config-auditor",
+    "artifact_type": "agent",
+    "overlap_name": "claude-md-management",
+    "source": "live-marketplace",
+    "recommendation": "Keep (customized)",
+    "first_flagged": "2026-11-09"
+  },
+  {
+    "artifact": "test-writer",
+    "artifact_type": "agent",
+    "overlap_name": "cs-test-master",
+    "source": "web-search",
+    "recommendation": "Monitor",
+    "first_flagged": "2026-11-09"
+  },
+  {
+    "artifact": "devcontainer-init",
+    "artifact_type": "skill",
+    "overlap_name": "trailofbits/devcontainer-setup",
+    "source": "web-search",
+    "recommendation": "Monitor",
+    "first_flagged": "2026-11-09"
+  },
+  {
+    "artifact": "design-workflow",
+    "artifact_type": "skill",
+    "overlap_name": "joestump/claude-plugin-design",
+    "source": "web-search",
+    "recommendation": "Monitor",
+    "first_flagged": "2026-11-09"
+  },
+  {
+    "artifact": "adr-writer",
+    "artifact_type": "skill",
+    "overlap_name": "melodic-software/adr-management",
+    "source": "web-search",
+    "recommendation": "Monitor",
+    "first_flagged": "2026-11-09"
+  }
+]

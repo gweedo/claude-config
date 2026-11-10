@@ -1,0 +1,35 @@
+[
+  {
+    "artifact": "adr-writer",
+    "artifact_type": "skill",
+    "artifact_path": "plugins/local/project-design-kit/skills/adr-writer/SKILL.md",
+    "overlap_name": "adr-kit (rvdbreemen)",
+    "source": "web-search",
+    "overlap_url": "https://awesome.ecosyste.ms/projects/github.com%2Frvdbreemen%2Fadr-kit",
+    "recommendation": "Monitor",
+    "recommendation_reason": "adr-kit is an actively maintained Claude Code ADR toolkit with templates and a session-start health detector; user's version has project-specific templates and conventions — worth re-checking for feature parity.",
+    "first_flagged": "2026-11-10"
+  },
+  {
+    "artifact": "devcontainer-init",
+    "artifact_type": "skill",
+    "artifact_path": "plugins/local/devcontainer-tools/skills/devcontainer-init/SKILL.md",
+    "overlap_name": "trailofbits/devcontainer-setup",
+    "source": "web-search",
+    "overlap_url": "https://skills.sh/trailofbits/skills/devcontainer-setup",
+    "recommendation": "Monitor",
+    "recommendation_reason": "trailofbits/devcontainer-setup detects language stack and scaffolds .devcontainer/ similarly; user's version has custom templates (Node/Python/Ubuntu defaults) and reference files — keep unless trail-of-bits version covers those.",
+    "first_flagged": "2026-11-10"
+  },
+  {
+    "artifact": "test-writer",
+    "artifact_type": "agent",
+    "artifact_path": "agents/test-writer.md",
+    "overlap_name": "community tdd-test-writer skills (e.g. am-will/codex-skills)",
+    "source": "web-search",
+    "overlap_url": "https://claudemarketplaces.com/skills/am-will/codex-skills/tdd-test-writer",
+    "recommendation": "Keep (customized)",
+    "recommendation_reason": "Community TDD skills run TDD cycles but lack the user's plan-first / approval-gated workflow (Discover → Plan → Approve → Write). The agent's staged approach is a deliberate convention, not a gap to fill.",
+    "first_flagged": "2026-11-10"
+  }
+]

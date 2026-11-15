@@ -7,6 +7,7 @@ root, plus self-contained sub-projects that each own their domain language.
 | ------- | ---------- | -------------- |
 | Security scan | `security-scan/CONTEXT.md` | CVE/freshness scanning capability (oracle / scanner / definer) |
 | Self-improve | `self-improve/CONTEXT.md` | Self-improvement loop project (created lazily by `/domain-modeling`) |
+| UX studio | `plugins/local/ux-studio/CONTEXT.md` | UX/UI Designer + Reviewer agents and their vendored design skills |
 
 System-wide architectural decisions live in `docs/adr/`. Context-scoped decisions live
 under `<context>/docs/adr/` (e.g. `security-scan/docs/adr/`).

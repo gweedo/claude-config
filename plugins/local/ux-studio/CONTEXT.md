@@ -59,6 +59,12 @@ A third-party skill copied into `skills/` and pinned to an upstream commit SHA i
 Changed only by `scripts/sync-vendor.sh`, never edited by hand.
 _Avoid_: Installed skill, dependency
 
+**On-demand folder**:
+A subfolder of a Vendored skill (lock column `on_demand`) that sync never downloads
+or touches. Fetched at the pinned SHA on first use by `scripts/fetch-on-demand.sh`
+and git-ignored. Today: Taste's `assets/`.
+_Avoid_: Excluded folder, assets cache
+
 **Primary workflow**:
 Impeccable. Governs app UI, dashboards, components and design systems end to end.
 _Avoid_: Main skill

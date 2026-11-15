@@ -11,7 +11,7 @@ from pathlib import Path
 import pytest
 
 PLUGIN = Path(__file__).resolve().parents[1]
-LOCK_HEADER = "# name\trepo\tsha\tsrc_path\tdest\texclude\n"
+LOCK_HEADER = "# name\trepo\tsha\tsrc_path\tdest\ton_demand\trole\n"
 
 
 def git(cwd, *args):
@@ -57,7 +57,13 @@ class Workspace:
         return Upstream(self.base, slug)
 
     def write_lock(self, rows):
-        lines = [LOCK_HEADER] + ["\t".join(r) + "\n" for r in rows]
+        """rows: (name, repo, sha, src, dest, on_demand[, role]); role defaults to skill,
+        except the awesome-design-md fixture, which is the design-md-index."""
+        def full(r):
+            if len(r) == 7:
+                return r
+            return (*r, "design-md-index" if r[0] == "awesome-design-md" else "skill")
+        lines = [LOCK_HEADER] + ["\t".join(full(r)) + "\n" for r in rows]
         (self.root / "vendor.lock").write_text("".join(lines))
 
     def lock(self) -> dict:

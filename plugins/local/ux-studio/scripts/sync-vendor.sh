@@ -33,7 +33,7 @@ done
 new_lock="$WORK/vendor.lock"
 grep '^#' "$LOCK" > "$new_lock"
 
-while IFS=$'\t' read -r name repo sha src dest exclude; do
+while IFS=$'\t' read -r name repo sha src dest on_demand role; do
   [[ -z "$name" || "$name" == \#* ]] && continue
   url="$GIT_BASE/$repo"
   if wants_update "$name"; then
@@ -45,24 +45,25 @@ while IFS=$'\t' read -r name repo sha src dest exclude; do
   clone="$WORK/$name"
   git clone -q --filter=blob:none --no-checkout "$url" "$clone"
   sparse=("/$src" "/LICENSE*" "/NOTICE*")
-  [[ "$exclude" != "-" ]] && sparse+=("!/$src/$exclude/")  # never download the excluded folder
+  [[ "$on_demand" != "-" ]] && sparse+=("!/$src/$on_demand/")  # fetched later by fetch-on-demand.sh
   git -C "$clone" sparse-checkout set --no-cone "${sparse[@]}"
   git -C "$clone" checkout -q "$sha"
 
   target="$ROOT/$dest"
   if [[ -d "$clone/$src" ]]; then
-    rm -rf "$target"; mkdir -p "$target"
+    # Replace everything except the on-demand folder, which is fetched separately.
+    mkdir -p "$target"
+    find "$target" -mindepth 1 -maxdepth 1 ! -name "$on_demand" -exec rm -rf {} +
     cp -a "$clone/$src/." "$target/"
-    [[ "$exclude" != "-" ]] && rm -rf "${target:?}/$exclude"
     for f in "$clone"/LICENSE* "$clone"/NOTICE*; do [[ -e "$f" ]] && cp "$f" "$target/"; done
   else
     mkdir -p "$(dirname "$target")"; cp "$clone/$src" "$target"
     for f in "$clone"/LICENSE* "$clone"/NOTICE*; do [[ -e "$f" ]] && cp "$f" "$(dirname "$target")/UPSTREAM-$(basename "$f")"; done
   fi
-  if [[ "$name" == "awesome-design-md" ]]; then
+  if [[ "$role" == "design-md-index" ]]; then
     git -C "$clone" ls-tree --name-only "$sha" design-md/ | sed 's#^design-md/##' > "$(dirname "$target")/upstream-slugs.txt"
   fi
-  printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$name" "$repo" "$sha" "$src" "$dest" "$exclude" >> "$new_lock"
+  printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$name" "$repo" "$sha" "$src" "$dest" "$on_demand" "$role" >> "$new_lock"
 done < "$LOCK"
 
 cp "$new_lock" "$LOCK"

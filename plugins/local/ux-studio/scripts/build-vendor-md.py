@@ -10,12 +10,12 @@ out = [
     "Pinned third-party content (ADR-0001). Generated from `vendor.lock` by",
     "`scripts/sync-vendor.sh`; never edit the vendored folders by hand.",
     "",
-    "| Name | Upstream | Pinned commit | Upstream path | Vendored to | Excluded |",
-    "| --- | --- | --- | --- | --- | --- |",
+    "| Name | Role | Upstream | Pinned commit | Upstream path | Vendored to | On-demand folder |",
+    "| --- | --- | --- | --- | --- | --- | --- |",
 ]
-for name, repo, sha, src, dest, excl in rows:
+for name, repo, sha, src, dest, on_demand, role in rows:
     link = f"[`{sha[:12]}`](https://github.com/{repo}/tree/{sha})"
-    out.append(f"| {name} | [{repo}](https://github.com/{repo}) | {link} | `{src}` | `{dest}` | {'—' if excl == '-' else f'`{excl}/`'} |")
+    out.append(f"| {name} | {role} | [{repo}](https://github.com/{repo}) | {link} | `{src}` | `{dest}` | {'—' if on_demand == '-' else f'`{on_demand}/`'} |")
 out += [
     "",
     "## Notes",
@@ -25,10 +25,11 @@ out += [
     "- **Impeccable** runs `scripts/impeccable`, a launcher that downloads a",
     "  self-contained engine binary from the project's GitHub releases on first run and",
     "  verifies it against `scripts/engine-checksums.txt` (sha256) before executing.",
-    "- **Taste `assets/`** (~38 MB of CSS, components, icons, photos) is git-ignored.",
-    "  `scripts/fetch-taste-assets.sh` fetches it at the pinned commit on first use.",
+    "- **On-demand folders** (Taste's `assets/`: ~38 MB of CSS, components, icons,",
+    "  photos) are git-ignored, never downloaded or touched by sync, and fetched at the",
+    "  pinned commit on first use by `scripts/fetch-on-demand.sh [name]`.",
     "- **awesome-design-md** is not a skill: only its README is vendored, to build",
-    "  `skills/design-md-reference/INDEX.md`. Each DESIGN.md is fetched on demand.",
+    "  the index (its lock role is `design-md-index`). Each DESIGN.md is fetched on demand.",
     "- **playwright-cli** needs the CLI itself: `npm install -g @playwright/cli@latest`",
     "  on first use, unless `npx --no-install playwright cli` already works.",
     "",

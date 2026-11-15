@@ -1,8 +1,8 @@
 """Seam S1: scripts/sync-vendor.sh re-vendors exactly what vendor.lock pins (#74)."""
 
 
-def skill_row(name, slug, sha, src, dest, exclude="-"):
-    return (name, slug, sha, src, dest, exclude)
+def skill_row(name, slug, sha, src, dest, on_demand="-"):
+    return (name, slug, sha, src, dest, on_demand)
 
 
 def test_vendors_files_from_the_pinned_commit_not_head(ws, design_upstream):
@@ -100,3 +100,17 @@ def test_single_file_entry_carries_upstream_notice_too(ws, design_upstream):
     ws.run("sync-vendor.sh")
 
     assert ws.read("skills/design-md-reference/UPSTREAM-NOTICE.md") == "third-party notice\n"
+
+
+def test_sync_leaves_an_existing_on_demand_folder_intact(ws, design_upstream):
+    _two_skills(ws, design_upstream)
+    ws.run("sync-vendor.sh")
+    (ws.root / "skills/widget/assets").mkdir()
+    (ws.root / "skills/widget/assets/fetched.css").write_text("fetched\n")
+    (ws.root / "skills/widget/assets/.vendored-sha").write_text("abc\n")
+
+    ws.run("sync-vendor.sh")
+
+    assert ws.read("skills/widget/assets/fetched.css") == "fetched\n"
+    assert ws.read("skills/widget/assets/.vendored-sha") == "abc\n"
+    assert ws.exists("skills/widget/SKILL.md")

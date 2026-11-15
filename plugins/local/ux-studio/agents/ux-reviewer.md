@@ -31,7 +31,7 @@ Done when every route has been seen at all three widths and its primary flow has
 
 - **Impeccable `audit`**: technical quality (accessibility, performance, responsive).
 - **Impeccable `critique`**: UX and design heuristics, against the Project DESIGN.md.
-- **Taste gate** (marketing or company websites only): apply `design-taste-frontend`'s house rules and review checks as pass/fail. Run `scripts/fetch-taste-assets.sh` from the plugin root first if its checker needs `assets/`. Skip this gate entirely for app UI.
+- **Taste gate** (marketing or company websites only): apply `design-taste-frontend`'s house rules and review checks as pass/fail. Run `scripts/fetch-on-demand.sh design-taste-frontend` from the plugin root first if its checker needs `assets/`. Skip this gate entirely for app UI.
 
 Run these in report mode. Where a skill's workflow would edit files, stop at the diagnosis.
 

@@ -4,9 +4,14 @@ import re, sys, pathlib
 root = pathlib.Path(sys.argv[1])
 lock = [l.split("\t") for l in (root / "vendor.lock").read_text().splitlines()
         if l and not l.startswith("#")]
-repo, sha = next((r[1], r[2]) for r in lock if r[0] == "awesome-design-md")
-skill = root / "skills/design-md-reference"
-readme = (skill / "upstream-README.md").read_text()
+entry = next((r for r in lock if r[6] == "design-md-index"), None)
+if entry is None:
+    print("design-md index: no design-md-index entry in vendor.lock, skipped")
+    sys.exit(0)
+_, repo, sha, _, dest, _, _ = entry
+readme_path = root / dest
+skill = readme_path.parent
+readme = readme_path.read_text()
 
 body = readme.split("## Collection", 1)[1].split("\n## ", 1)[0]
 out = [

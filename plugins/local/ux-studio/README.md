@@ -35,7 +35,7 @@ Pins, licences and runtime notes are in [VENDOR.md](VENDOR.md).
 - `playwright-cli` installs itself on first use (`npm install -g @playwright/cli@latest`).
 - Impeccable's launcher downloads a checksum-verified engine binary from its GitHub
   releases on first run.
-- Taste needs its `assets/`: run `scripts/fetch-taste-assets.sh` once (the Designer does
+- Taste needs its `assets/`: run `scripts/fetch-on-demand.sh design-taste-frontend` once (the Designer does
   this itself). Taste also registers a `Stop` hook (`scripts/gate.mjs`) while its skill
   is active, which checks the built page in a real browser.
 

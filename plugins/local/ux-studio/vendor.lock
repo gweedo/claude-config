@@ -1,5 +1,5 @@
-# name	repo	sha	src_path	dest	exclude
-impeccable	pbakaus/impeccable	2b86d9c07b97d4bed7de23583e1bd1e58dd2baae	plugin/skills/impeccable	skills/impeccable	-
-design-taste-frontend	Leonxlnx/taste-skill	f6b76575f949707b4e3c37cd86cb44b0b98643e8	skills/taste-skill	skills/design-taste-frontend	assets
-playwright-cli	microsoft/playwright-cli	b21724888b8100b05ef8dee3a92f2bb03bf4dcde	skills/playwright-cli	skills/playwright-cli	-
-awesome-design-md	VoltAgent/awesome-design-md	fcc70284932276d085f01ef9f83edde90b1258cb	README.md	skills/design-md-reference/upstream-README.md	-
+# name	repo	sha	src_path	dest	on_demand	role
+impeccable	pbakaus/impeccable	2b86d9c07b97d4bed7de23583e1bd1e58dd2baae	plugin/skills/impeccable	skills/impeccable	-	skill
+design-taste-frontend	Leonxlnx/taste-skill	f6b76575f949707b4e3c37cd86cb44b0b98643e8	skills/taste-skill	skills/design-taste-frontend	assets	skill
+playwright-cli	microsoft/playwright-cli	b21724888b8100b05ef8dee3a92f2bb03bf4dcde	skills/playwright-cli	skills/playwright-cli	-	skill
+awesome-design-md	VoltAgent/awesome-design-md	fcc70284932276d085f01ef9f83edde90b1258cb	README.md	skills/design-md-reference/upstream-README.md	-	design-md-index

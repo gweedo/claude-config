@@ -1,0 +1,41 @@
+name: ux-studio
+
+on:
+  pull_request:
+    paths:
+      - "plugins/local/ux-studio/**"
+      - ".github/workflows/ux-studio.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: plugins/local/ux-studio
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install test dependencies
+        run: pip install pytest==8.3.3 pyyaml==6.0.2
+
+      # Fixture repos need a committer identity; tests never touch the network.
+      - name: Vendoring + structure tests
+        run: |
+          git config --global user.name ci
+          git config --global user.email ci@example.invalid
+          git config --global init.defaultBranch main
+          python -m pytest -q tests
+
+      - name: claude plugin validate
+        run: npx --yes @anthropic-ai/claude-code@2.1.325 plugin validate .

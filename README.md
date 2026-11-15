@@ -49,6 +49,12 @@ Agents in `agents/` are picked up automatically by Claude Code. Invoke them in a
 | `test-writer.md` | Analyzes a file or folder, proposes a test plan for review, then writes tests on approval |
 | `plan-writer.md` | Creates a structured `plans/` folder with 4 YAML chunks (meta, discovery, steps, verify) and a synced `.md` overview; waits for review before finalizing |
 
+### Plugin agents
+
+| Plugin | Agents | Purpose |
+|--------|--------|---------|
+| `plugins/local/ux-studio` | `ux-ui-designer`, `ux-reviewer` | Builds UI with vendored design skills (Impeccable, Taste, Playwright CLI, awesome-design-md index); a separate read-only agent reviews it. `/ux-studio:ux-loop` runs both, capped at 2 review passes |
+
 ## Restore on a new machine
 
 ```bash

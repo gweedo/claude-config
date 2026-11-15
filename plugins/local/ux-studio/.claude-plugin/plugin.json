@@ -1,0 +1,8 @@
+{
+  "name": "ux-studio",
+  "version": "0.1.0",
+  "description": "A UX/UI Designer agent and a separate read-only Reviewer agent sharing vendored design skills (Impeccable, Taste, Playwright CLI, an awesome-design-md index), plus a capped build -> review -> fix loop.",
+  "author": {
+    "name": "ThisGweedo"
+  }
+}

@@ -12,6 +12,8 @@ daemon/
 file-history/
 paste-cache/
 skills/
+# ...but plugin skills under plugins/local/ are config and stay tracked
+!plugins/local/*/skills/
 
 # Session and conversation history
 sessions/

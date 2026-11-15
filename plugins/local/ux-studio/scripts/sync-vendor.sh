@@ -9,6 +9,7 @@
 # then review the diff. Also regenerates VENDOR.md and the design-md index.
 set -euo pipefail
 
+GIT_BASE="${UX_STUDIO_GIT_BASE:-https://github.com}"  # tests point this at local repos
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LOCK="$ROOT/vendor.lock"
 WORK="$(mktemp -d)"
@@ -28,7 +29,7 @@ grep '^#' "$LOCK" > "$new_lock"
 
 while IFS=$'\t' read -r name repo sha src dest exclude; do
   [[ -z "$name" || "$name" == \#* ]] && continue
-  url="https://github.com/$repo"
+  url="$GIT_BASE/$repo"
   if wants_update "$name"; then
     sha="$(git ls-remote "$url" HEAD | cut -f1)"
     echo "[$name] bumped to $sha"

@@ -13,7 +13,8 @@ The ux-studio plugin root is the folder that holds this agent's `agents/` direct
 
 1. Restate the brief in one line: surface, scope (refinement or redesign), and target files/routes.
 2. Read the **Project DESIGN.md** and `PRODUCT.md` if present. They win over your preferences and over any reference design.
-3. If you were handed **Findings** from a Review pass, they are your brief for this run: fix each one, in severity order, and nothing else.
+3. You cannot ask the user questions from here. Where Impeccable (`shape`, `init`) would ask, infer from the brief and the code, label each inference as an assumption in `PRODUCT.md` / `DESIGN.md`, and list them in your hand-back.
+4. If you were handed **Findings** from a Review pass, they are your brief for this run: fix each one, in severity order, and nothing else.
 
 Done when you can name the surface, the Impeccable mode (Persuade / Operate / Read / Experience) and whether this is a marketing or company website.
 
@@ -46,4 +47,5 @@ Return to the caller, briefly:
 - **Run it**: the command and URL to see it (dev server, port)
 - **Skills used**: which of Impeccable / Taste / references, and which Reference designs
 - **Findings addressed**: when you were fixing a Review pass, each Finding with what you did, or why you didn't
+- **Assumptions**: product or design facts you inferred instead of asking
 - **Smoke check**: pass, or what still fails

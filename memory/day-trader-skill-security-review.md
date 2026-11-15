@@ -81,3 +81,18 @@ with a manual read of the order/side-effect path.
 `NVIDIA/SkillSpector`, `cisco-ai-defense/skill-scanner`, `snyk/agent-scan`,
 `ryo-ebata/cc-audit` (skills/hooks/MCP static), `trailofbits/skills` (audit skills),
 `anthropics/claude-code-security-review` (PR GitHub Action).
+
+## Follow-up: offline backtest + Claude-driven run (2026-11-15)
+
+Full write-up: `experiments/day-trader-backtest/RESULTS.md`.
+
+- Harness reproduces the README TSLA trade to the cent → tool wiring trustworthy.
+- **No edge on synthetic data:** README settings lose ~−0.09R/trade on bootstrapped TSLA bars
+  (≈ −$521/yr on $5k); none of 27 ORB variants beats a random-entry control beyond chance.
+  Caveat: bootstrap destroys intraday momentum; real contiguous history still untested.
+- Time Machine over-predicted target-first (39 % predicted vs 32 % actual, n=50).
+- Claude following the SKILL.md files passed 10/10 safety traps (yes-to-all, "sure", wrong
+  qty, skip-risk, go-live, daily-limit block, injected headline) but disregarded the injected
+  headline **silently** instead of warning the user.
+- Skill bugs/quirks: `trader-news --now` treats naive times as UTC (others use NY time);
+  `exit.py` default target is 2R while the README example is 1R; `news.py` prints titles only.

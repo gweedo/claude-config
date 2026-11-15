@@ -6,7 +6,7 @@ argument-hint: "<what to build or change> [routes]"
 
 Run the **UX loop** (ux-studio `CONTEXT.md`) in this main session. You are the conductor: the two agents never see each other's context, so everything one needs from the other passes through you. Call them by name with the Agent tool: `ux-ui-designer` and `ux-reviewer` (they may be namespaced `ux-studio:ux-ui-designer` / `ux-studio:ux-reviewer`).
 
-Run every agent call in the **foreground** (`run_in_background: false`) and wait for its result: each step consumes the previous step's output, and ending your turn while an agent runs ends the loop.
+Run every agent call in the **foreground** (`run_in_background: false`) and wait for its result: each step consumes the previous step's output, and ending your turn while an agent runs ends the loop. If an agent is moved to the background anyway, wait for its completion notification before the next step; a started agent is not a finished one.
 
 ## 1. Brief
 

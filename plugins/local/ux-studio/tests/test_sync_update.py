@@ -52,3 +52,13 @@ def test_lock_header_survives_a_bump(ws, design_upstream):
     ws.run("sync-vendor.sh", "--update")
 
     assert ws.read("vendor.lock").startswith("# name\trepo\tsha")
+
+
+def test_update_with_an_unknown_name_fails_and_bumps_nothing(ws, design_upstream):
+    (a1, _), (b1, _) = _setup(ws, design_upstream)
+
+    result = ws.run("sync-vendor.sh", "--update", "alhpa", check=False)
+
+    assert result.returncode != 0
+    assert "alhpa" in result.stderr
+    assert ws.lock()["alpha"][2] == a1 and ws.lock()["beta"][2] == b1

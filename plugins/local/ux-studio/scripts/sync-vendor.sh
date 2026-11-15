@@ -24,6 +24,12 @@ wants_update() {
   local n; for n in "${only[@]}"; do [[ "$n" == "$1" ]] && return 0; done; return 1
 }
 
+for n in ${only[@]+"${only[@]}"}; do
+  if ! awk -F'\t' -v n="$n" '$1 == n { found = 1 } END { exit !found }' "$LOCK"; then
+    echo "sync-vendor: unknown entry '$n' (not in vendor.lock)" >&2; exit 2
+  fi
+done
+
 new_lock="$WORK/vendor.lock"
 grep '^#' "$LOCK" > "$new_lock"
 
@@ -38,7 +44,9 @@ while IFS=$'\t' read -r name repo sha src dest exclude; do
 
   clone="$WORK/$name"
   git clone -q --filter=blob:none --no-checkout "$url" "$clone"
-  git -C "$clone" sparse-checkout set --no-cone "/$src" "/LICENSE*" "/NOTICE*"
+  sparse=("/$src" "/LICENSE*" "/NOTICE*")
+  [[ "$exclude" != "-" ]] && sparse+=("!/$src/$exclude/")  # never download the excluded folder
+  git -C "$clone" sparse-checkout set --no-cone "${sparse[@]}"
   git -C "$clone" checkout -q "$sha"
 
   target="$ROOT/$dest"
@@ -49,7 +57,7 @@ while IFS=$'\t' read -r name repo sha src dest exclude; do
     for f in "$clone"/LICENSE* "$clone"/NOTICE*; do [[ -e "$f" ]] && cp "$f" "$target/"; done
   else
     mkdir -p "$(dirname "$target")"; cp "$clone/$src" "$target"
-    for f in "$clone"/LICENSE*; do [[ -e "$f" ]] && cp "$f" "$(dirname "$target")/UPSTREAM-$(basename "$f")"; done
+    for f in "$clone"/LICENSE* "$clone"/NOTICE*; do [[ -e "$f" ]] && cp "$f" "$(dirname "$target")/UPSTREAM-$(basename "$f")"; done
   fi
   if [[ "$name" == "awesome-design-md" ]]; then
     git -C "$clone" ls-tree --name-only "$sha" design-md/ | sed 's#^design-md/##' > "$(dirname "$target")/upstream-slugs.txt"

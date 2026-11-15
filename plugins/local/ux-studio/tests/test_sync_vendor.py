@@ -89,3 +89,14 @@ def test_vendor_record_lists_every_pin_with_its_commit(ws, design_upstream):
     assert f"[`{sha[:12]}`](" in record and "| widget |" in record
     assert f"[`{design_sha[:12]}`](" in record and "| awesome-design-md |" in record
     assert "`assets/`" in record
+
+
+def test_single_file_entry_carries_upstream_notice_too(ws, design_upstream):
+    up, _ = design_upstream
+    sha = up.commit({"NOTICE.md": "third-party notice\n"})
+    ws.write_lock([("awesome-design-md", "acme/awesome-design-md", sha,
+                    "README.md", "skills/design-md-reference/upstream-README.md", "-")])
+
+    ws.run("sync-vendor.sh")
+
+    assert ws.read("skills/design-md-reference/UPSTREAM-NOTICE.md") == "third-party notice\n"

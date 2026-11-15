@@ -40,7 +40,7 @@ _Avoid_: Review loop, iteration
 
 **Finding**:
 One issue a Review pass reports, ranked by severity (blocking or minor) and tagged
-with its source (Impeccable audit, Impeccable critique, or Taste gate). Returned to
+with its source (Impeccable audit, Impeccable critique, Taste gate, or Playwright). Returned to
 the caller; the Reviewer never writes files.
 _Avoid_: Bug, comment, issue
 
@@ -54,9 +54,9 @@ _Avoid_: Backlog item, residual
 ### Skills
 
 **Vendored skill**:
-A third-party skill copied into `skills/` and pinned to an upstream commit SHA
-recorded in `VENDOR.md`. Changed only by `scripts/sync-vendor.sh`, never edited by
-hand.
+A third-party skill copied into `skills/` and pinned to an upstream commit SHA in
+`vendor.lock` (the single source of truth; `VENDOR.md` is generated from it).
+Changed only by `scripts/sync-vendor.sh`, never edited by hand.
 _Avoid_: Installed skill, dependency
 
 **Primary workflow**:

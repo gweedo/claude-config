@@ -50,3 +50,14 @@ def test_agent_name_matches_its_file(path):
 def test_reviewer_cannot_edit_files():
     tools = frontmatter(PLUGIN / "agents/ux-reviewer.md")["tools"]
     assert not {"Edit", "Write", "NotebookEdit"} & set(tools)
+
+
+def test_every_finding_source_the_reviewer_emits_is_in_the_glossary():
+    import re
+    reviewer = (PLUGIN / "agents/ux-reviewer.md").read_text()
+    sources = re.search(r"source: (.+)", reviewer).group(1).split(" | ")
+    glossary = (PLUGIN / "CONTEXT.md").read_text().split("**Finding**:", 1)[1].split("\n**", 1)[0]
+    words = {"impeccable-audit": "Impeccable audit", "impeccable-critique": "Impeccable critique",
+             "taste-gate": "Taste gate", "playwright": "Playwright"}
+    missing = [s for s in sources if words.get(s.strip(), s) not in glossary]
+    assert not missing, f"glossary Finding entry lacks sources: {missing}"

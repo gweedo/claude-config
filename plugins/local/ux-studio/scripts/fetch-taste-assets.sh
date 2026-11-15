@@ -4,7 +4,7 @@
 set -euo pipefail
 GIT_BASE="${UX_STUDIO_GIT_BASE:-https://github.com}"  # tests point this at local repos
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-read -r _ repo sha src dest _ < <(grep -P '^design-taste-frontend\t' "$ROOT/vendor.lock")
+IFS=$'\t' read -r _ repo sha src dest _ < <(awk -F'\t' '$1 == "design-taste-frontend"' "$ROOT/vendor.lock")
 target="$ROOT/$dest/assets"
 stamp="$target/.vendored-sha"
 if [[ -f "$stamp" && "$(cat "$stamp")" == "$sha" ]]; then echo "Taste assets already at ${sha:0:12}"; exit 0; fi

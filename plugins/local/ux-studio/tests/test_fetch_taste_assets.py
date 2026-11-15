@@ -55,3 +55,23 @@ def test_fetched_assets_are_git_ignored():
         cwd=PLUGIN, capture_output=True,
     )
     assert result.returncode == 0
+
+
+def test_works_with_a_grep_that_lacks_perl_regex(ws, tmp_path):
+    """BSD/macOS grep has no -P; simulate it with a shim that rejects -P."""
+    import os, shutil
+    shim = tmp_path / "bin"
+    shim.mkdir()
+    real = shutil.which("grep")
+    (shim / "grep").write_text(
+        f'#!/usr/bin/env bash\nfor a in "$@"; do [[ "$a" == -*P* && "$a" != --* ]] && '
+        f'{{ echo "grep: invalid option -- P" >&2; exit 2; }}; done\nexec {real} "$@"\n')
+    (shim / "grep").chmod(0o755)
+    _setup(ws)
+    env = {**os.environ, "UX_STUDIO_GIT_BASE": ws.base.as_uri(), "PATH": f"{shim}:{os.environ['PATH']}"}
+
+    result = subprocess.run(["bash", str(ws.root / "scripts/fetch-taste-assets.sh")],
+                            cwd=ws.root, env=env, capture_output=True, text=True)
+
+    assert result.returncode == 0, result.stderr
+    assert ws.read(f"{DEST}/assets/system.css") == "v1\n"

@@ -32,6 +32,25 @@ The Designer's own closing check: the page renders, no console errors, key
 breakpoints don't break. Deliberately excludes judging how good it looks.
 _Avoid_: Self-review, verification
 
+**UX loop**:
+The build → Review pass → fix cycle, run by the `ux-loop` skill in the main session.
+Capped at two Review passes. The only path besides an explicit user request that
+invokes the Reviewer; the Reviewer is never auto-delegated.
+_Avoid_: Review loop, iteration
+
+**Finding**:
+One issue a Review pass reports, ranked by severity (blocking or minor) and tagged
+with its source (Impeccable audit, Impeccable critique, or Taste gate). Returned to
+the caller; the Reviewer never writes files.
+_Avoid_: Bug, comment, issue
+
+**Leftover**:
+A Finding still open when the UX loop hits its cap. With the user's go-ahead, filed
+to the project's issue tracker per its `docs/agents/issue-tracker.md` (one issue per
+blocking Leftover, minor ones grouped, labelled for triage); reported in chat when
+the project has no tracker set up.
+_Avoid_: Backlog item, residual
+
 ### Skills
 
 **Vendored skill**:

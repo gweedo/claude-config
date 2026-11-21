@@ -31,5 +31,27 @@
     "recommendation": "Keep (customized)",
     "recommendation_reason": "Community TDD skills run TDD cycles but lack the user's plan-first / approval-gated workflow (Discover → Plan → Approve → Write). The agent's staged approach is a deliberate convention, not a gap to fill.",
     "first_flagged": "2026-11-10"
+  },
+  {
+    "artifact": "orchestrator",
+    "artifact_type": "skill",
+    "artifact_path": "plugins/local/agent-orchestra/skills/orchestrator/SKILL.md",
+    "overlap_name": "yonatangross/orchestkit multi-agent-orchestration",
+    "source": "web-search",
+    "overlap_url": "https://claudemarketplaces.com/skills/yonatangross/orchestkit/agent-orchestration",
+    "recommendation": "Monitor",
+    "recommendation_reason": "orchestkit covers fan-out/fan-in and supervisor routing (~213 stars); user's version adds a plan-gated approval step and project-specific Developer/Architect roles not found in orchestkit.",
+    "first_flagged": "2026-11-14"
+  },
+  {
+    "artifact": "cicd-designer",
+    "artifact_type": "skill",
+    "artifact_path": "plugins/local/project-design-kit/skills/cicd-designer/SKILL.md",
+    "overlap_name": "wshobson/agents cicd-automation",
+    "source": "web-search",
+    "overlap_url": "https://www.vibeindex.ai/plugins/wshobson/agents/cicd-automation",
+    "recommendation": "Monitor",
+    "recommendation_reason": "wshobson/cicd-automation has 37k installs and 4 skills covering GitHub Actions, GitLab CI, and secrets; user's version is design+doc focused with a stage-by-stage workflow — keep for now, monitor for feature parity.",
+    "first_flagged": "2026-11-14"
   }
 ]
